@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="asembler_share" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/asembler_share" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-pedantic" />
+					<Add option="-Wall" />
+					<Add option="-ansi" />
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/asembler_share" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-pedantic" />
+					<Add option="-Wall" />
+					<Add option="-ansi" />
+					<Add option="-g" />
+					<Add directory="C:/Users/USER/Dropbox/asembler_share/" />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="C:/Users/USER/Dropbox/asembler_share/" />
+				</ResourceCompiler>
+				<Linker>
+					<Add directory="C:/Users/USER/Dropbox/asembler_share/" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="C:/Users/USER/Dropbox/asembler_share/" />
+		</Compiler>
+		<ResourceCompiler>
+			<Add directory="C:/Users/USER/Dropbox/asembler_share/" />
+		</ResourceCompiler>
+		<Linker>
+			<Add directory="C:/Users/USER/Dropbox/asembler_share/" />
+		</Linker>
+		<Unit filename="asembler.h" />
+		<Unit filename="commands.c">
+			<Option compilerVar="CC" />
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="lineCounter.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="metrixParam.c">
+			<Option compilerVar="CC" />
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
