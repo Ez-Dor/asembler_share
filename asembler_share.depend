@@ -20,3 +20,21 @@
 	<ctype.h>
 	<stdio.h>
 
+1434403340 source:c:\users\user\documents\school\20465\asembler_share\linecounter.c
+	<stdlib.h>
+	<ctype.h>
+	<stdio.h>
+
+1434547269 source:c:\users\user\documents\school\20465\asembler_share\main.c
+	<stdio.h>
+	<stdlib.h>
+	"asembler.h"
+
+1434401376 c:\users\user\documents\school\20465\asembler_share\asembler.h
+
+1434548208 source:c:\users\user\documents\school\20465\asembler_share\metrixparam.c
+	<stdlib.h>
+	<ctype.h>
+	<stdio.h>
+	"asembler.h"
+
