@@ -2,18 +2,18 @@
 #include <ctype.h>
 #include <stdio.h>
 
-int lines;
+int lines = 0;
 
 int lineCounter (FILE *file)
 {
 
-    char s;
+    char c;
     if (fgetc(file)!= EOF)
         lines++;
 
-    while ((s = fgetc(file))!= EOF)
+    while ((c = fgetc(file))!= EOF)
     {
-        if (s == '\n')
+        if (c == '\n')
             lines++;
     }
     return lines;

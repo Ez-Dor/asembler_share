@@ -60,8 +60,13 @@
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="metrix.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="metrixParam.c">
 			<Option compilerVar="CC" />
+			<Option compile="0" />
+			<Option link="0" />
 		</Unit>
 		<Extensions>
 			<code_completion />
