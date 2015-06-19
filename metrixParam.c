@@ -1,10 +1,18 @@
+/*
+Matrix Parameters by Dor A
+Gets input commands from file, allocates memory and sorts them in a structure.
+*/
+
+/*Include standard libraries and custom header*/
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdio.h>
 #include "asembler.h"
 
+/*This is the structure for a line of command*/
 typedef struct
 {
+/*DOR - #define MAX_INPUT 31*/
     char label [31];
     char command [31];
     char operand1 [31];
@@ -12,34 +20,47 @@ typedef struct
     int address;
 } metrixLine;
 
+/*Function prototype*/
 int lineCounter(FILE *file);
 char otherFile (char k, FILE *file2);
 char closeSpaces (char space, FILE *file1);
 
+/*Global variable*/
 metrixLine *mat;
 
 void metrixParam (FILE *file)
 {
-
-    char s = fgetc(file);
+    /*Variables*/
+    char s;
     int state = LABEL;
     int line;
     int addressCounter = 100;
     int i = 0;
     int j=0;
+
+    /*Use Line Counter to know how many lines are in the input file*/
     line = lineCounter(file);
+
+    /*Set file pointer to start of file*/s
     fseek(file,SEEK_SET,0);
+/*Dor - CHECK THIS IS THE RIGHT PLACE*/
+    s = fgetc(file);
+
+    /*Allocate memory for the matrix according to the lines.*/
     mat = malloc(sizeof(metrixLine) * line);
+
     if (!mat)
     {
-        printf("memory allocation failed");
+        printf("Memory allocation failed");
         exit(0);
     }
+
     while (i<line)
     {
         state = LABEL;
         if (s == '.')
         {
+/*DOR- Right now skips the line*/
             s = otherFile (s,file);
         }
         else
@@ -55,7 +76,7 @@ void metrixParam (FILE *file)
                 {
                     if(j == 31 && s != ':')
                     {
-                        printf("Memory crashed - the Label on line %i is more then 30 characters\n",i);
+                        printf("Memory crashed - the label on line %i is more then 30 characters\n",i);
                         state = COMMAND;
                         j = 0;
                     }
@@ -63,13 +84,13 @@ void metrixParam (FILE *file)
                     {
                         if (j==0 && isalpha(s) == 0)
                         {
-                            printf("First character on label in line %i is wrong\n", i);
+/*DOR - FIX*/
+                            printf("The first character on the label in line %i is wrong\n", i);
                         }
                         else if (isalpha(s)== 0 && isdigit(s)==0 && j !=0 )
                         {
-                            printf("Wrong character on label in line %i\n", i);
+                            printf("Wrong character found on label in line %i\n", i);
                         }
-
 
                         mat[i].label[j] = s;
                         j++;
