@@ -39,3 +39,12 @@
 
 1434401376 source:c:\users\user\documents\school\20465\asembler_share\asembler.h
 
+1434729787 source:h:\projc\asembler_share\linecounter.c
+	<stdlib.h>
+	<ctype.h>
+	<stdio.h>
+
+1434729787 source:h:\projc\asembler_share\main.c
+	<stdio.h>
+	<stdlib.h>
+

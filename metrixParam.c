@@ -30,7 +30,11 @@ metrixLine *mat;
 
 void metrixParam (FILE *file)
 {
+<<<<<<< HEAD
     /*Variables*/
+=======
+
+>>>>>>> 2cc9cc23d4b8b3ecefe7d70346b3b0ef5d954af2
     char s;
     int state = LABEL;
     int line;
@@ -43,10 +47,14 @@ void metrixParam (FILE *file)
 
     /*Set file pointer to start of file*/s
     fseek(file,SEEK_SET,0);
+<<<<<<< HEAD
 /*Dor - CHECK THIS IS THE RIGHT PLACE*/
     s = fgetc(file);
 
     /*Allocate memory for the matrix according to the lines.*/
+=======
+    s = fgetc(file);
+>>>>>>> 2cc9cc23d4b8b3ecefe7d70346b3b0ef5d954af2
     mat = malloc(sizeof(metrixLine) * line);
 
     if (!mat)
