@@ -9,8 +9,8 @@ typedef struct
     char command [31];
     char operand1 [31];
     char operand2 [31];
-     int address;
-}metrixLine;
+    int address;
+} metrixLine;
 
 int lineCounter(FILE *file);
 char otherFile (char k, FILE *file2);
@@ -24,7 +24,7 @@ void metrixParam (FILE *file)
     char s = fgetc(file);
     int state = LABEL;
     int line;
-    /*int addressCounter = 100;*/
+    int addressCounter = 100;
     int i = 0;
     int j=0;
     line = lineCounter(file);
@@ -42,60 +42,60 @@ void metrixParam (FILE *file)
         {
             s = otherFile (s,file);
         }
-        if (s==' ')
+        else
         {
-         s=closeSpaces(s,file);
-          state = COMMAND;
-        }
-        state = LABEL;
-            while (s!= '\n' || s != EOF)
+            if (s==' '||s=='\t')
             {
-
+                s=closeSpaces(s,file);
+                state = COMMAND;
+            }
+            while (s!= '\n' && s != EOF)
+            {
                 if(state == LABEL)
                 {
-                 if(j == 31 && s != ':')
-                 {
-                    printf("Memory crashed - the Label on line %i is more then 30 characters\n",i);
-                     state = COMMAND;
-                    j = 0;
-                 }
-                 else if(s != ':')
-                 {
-                    if (j==0 && isalpha(s) == 0)
+                    if(j == 31 && s != ':')
                     {
-                        printf("First character on label in line %i is wrong\n", i);
+                        printf("Memory crashed - the Label on line %i is more then 30 characters\n",i);
+                        state = COMMAND;
+                        j = 0;
                     }
-                    else if (isalpha(s)== 0 && isdigit(s)==0 && j !=0 )
+                    else if(s != ':')
                     {
-                        printf("Wrong character on label in line %i\n", i);
+                        if (j==0 && isalpha(s) == 0)
+                        {
+                            printf("First character on label in line %i is wrong\n", i);
+                        }
+                        else if (isalpha(s)== 0 && isdigit(s)==0 && j !=0 )
+                        {
+                            printf("Wrong character on label in line %i\n", i);
+                        }
+
+
+                        mat[i].label[j] = s;
+                        j++;
+
                     }
-
-
-                    mat[i].label[j] = s;
-                    j++;
-
-                 }
-                 else
-                 {
-                    state = COMMAND;
-                    j = 0;
-                 }
+                    else
+                    {
+                        state = COMMAND;
+                        j = 0;
+                    }
 
                 }
                 else if (state == COMMAND)
                 {
-                    if ((j==31 && s != ' ')|| (j==31 && s != '\t'))
+                    if (j==31 && s != ' ' && s != '\t')
                     {
                         printf("Memory crashed - the Command on line %i is too long\n",i);
                         state = OPERAND1;
-                    j = 0;
+                        j = 0;
                     }
-                    else if ((j==0 && s != ' ')||(j==0 && s != '\t'))
+                    else if (j==0 && s != ' ' && s != '\t')
                     {
                         mat[i].command[j] = s;
                         j++;
                     }
-                    else if ((j>0 && s!=' ') || (j>0 && s!='\t'))
+                    else if (j>0 && s!=' ' && s!='\t')
                     {
                         mat[i].command[j] = s;
                         j++;
@@ -104,70 +104,66 @@ void metrixParam (FILE *file)
                     {
                         state = OPERAND1;
                         j=0;
+
                     }
 
                 }
                 else if (state == OPERAND1)
                 {
-                     if ((j==31 && s != ' ')|| (j==31 && s != '\t')||(j==31 && s != ','))
+                    if (j==31 && s != ' '&& s != '\t'&& s != ',')
                     {
-                        printf("Memory crashed - the Command on line %i is too long\n");
-                       state = OPERAND2;
+                        printf("Memory crashed - the operand1 on line %i is too long\n");
+                        state = OPERAND2;
                         j=0;
                     }
-                      else if ((j==0 && s != ' ')||(j==0 && s != '\t')||(j==0 && s != ','))
+                    else if (j==0 && s != ' ' && s != '\t' && s != ',')
                     {
                         mat[i].operand1[j] = s;
                         j++;
                     }
-                    else if ((j>0 && s!=' ') || (j>0 && s!='\t')||(j==0 && s != ','))
+                    else if (j>0 && s!=' '&& s!='\t' && s != ',')
                     {
                         mat[i].operand1[j] = s;
                         j++;
                     }
-                    else if ((j>0 && s==' ') || (j>0 && s=='\t')||(j==0 && s != ','))
+                    else if ((j>0 && s==' ') || (j>0 && s=='\t')||(j>0 && s == ','))
                     {
                         state = OPERAND2;
                         j=0;
+
                     }
 
                 }
                 else if (state == OPERAND2)
                 {
+
+                    if (j==31 && s != ' ' && s != '\t')
                     {
-                     if ((j==31 && s != ' ')|| (j==31 && s != '\t'))
-                    {
-                        printf("Memory crashed - the Command on line %i is too long\n");
+                        printf("Memory crashed - the operand2 on line %i is too long\n");
                         exit(0);
                     }
-                      else if ((j==0 && s != ' ')||(j==0 && s != '\t'))
+                    else
                     {
-                        mat[i].operand1[j] = s;
+                        mat[i].operand2[j] = s;
                         j++;
-                    }
-                    else if ((j>0 && s!=' ') || (j>0 && s!='\t'))
-                    {
-                        mat[i].operand1[j] = s;
-                        j++;
-                    }
-                    else if ((j>0 && s==' ') || (j>0 && s=='\t'))
-                    {
-                        state = LABEL;
-                        j=0;
                     }
                 }
 
+                s = fgetc(file);
             }
-            s = fgetc(file);
 
         }
+        j=0;
+        mat[i].address = addressCounter+i;
         i++;
         s = fgetc(file);
+
+
     }
     i=0;
     while (i<line)
     {
-        printf("%s\t%s\t%s\t%s\n",mat[i].label,mat[i].command,mat[i].operand1,mat[i].operand2);
+        printf("%s\t%s\t%s\t%s\t%i\n",mat[i].label,mat[i].command,mat[i].operand1,mat[i].operand2,mat[i].address);
         i++;
     }
 }
@@ -175,7 +171,7 @@ void metrixParam (FILE *file)
 char closeSpaces (char space, FILE *file1)
 {
 
-    while (space == ' ')
+    while (space != ' ' && space != '\t')
     {
 
         space=fgetc(file1);
