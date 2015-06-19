@@ -21,7 +21,7 @@ metrixLine *mat;
 void metrixParam (FILE *file)
 {
 
-    char s = fgetc(file);
+    char s;
     int state = LABEL;
     int line;
     int addressCounter = 100;
@@ -29,6 +29,7 @@ void metrixParam (FILE *file)
     int j=0;
     line = lineCounter(file);
     fseek(file,SEEK_SET,0);
+    s = fgetc(file);
     mat = malloc(sizeof(metrixLine) * line);
     if (!mat)
     {
