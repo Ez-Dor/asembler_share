@@ -3,7 +3,14 @@
 #include <stdio.h>
 #include "asembler.h"
 
-
+typedef struct
+{
+    char label [31];
+    char command [31];
+    char operand1 [31];
+    char operand2 [31];
+     int address;
+}metrixLine;
 
 int lineCounter(FILE *file);
 char otherFile (char k, FILE *file2);
@@ -21,6 +28,7 @@ void metrixParam (FILE *file)
     int i = 0;
     int j=0;
     line = lineCounter(file);
+    fseek(file,SEEK_SET,0);
     mat = malloc(sizeof(metrixLine) * line);
     if (!mat)
     {
@@ -29,21 +37,19 @@ void metrixParam (FILE *file)
     }
     while (i<line)
     {
-         printf("1\n");
+        state = LABEL;
         if (s == '.')
         {
-            printf("2\n");
             s = otherFile (s,file);
-            printf("4\n");
         }
         if (s==' ')
         {
          s=closeSpaces(s,file);
+          state = COMMAND;
         }
         state = LABEL;
             while (s!= '\n' || s != EOF)
             {
-                 printf("%c\n",s);
 
                 if(state == LABEL)
                 {
@@ -106,7 +112,8 @@ void metrixParam (FILE *file)
                      if ((j==31 && s != ' ')|| (j==31 && s != '\t')||(j==31 && s != ','))
                     {
                         printf("Memory crashed - the Command on line %i is too long\n");
-                        exit(0);
+                       state = OPERAND2;
+                        j=0;
                     }
                       else if ((j==0 && s != ' ')||(j==0 && s != '\t')||(j==0 && s != ','))
                     {
@@ -151,12 +158,17 @@ void metrixParam (FILE *file)
                 }
 
             }
-             printf("%c\n",s);
             s = fgetc(file);
 
         }
         i++;
         s = fgetc(file);
+    }
+    i=0;
+    while (i<line)
+    {
+        printf("%s\t%s\t%s\t%s\n",mat[i].label,mat[i].command,mat[i].operand1,mat[i].operand2);
+        i++;
     }
 }
 
@@ -173,13 +185,9 @@ char closeSpaces (char space, FILE *file1)
 
 char otherFile (char k, FILE *file2)
 {
-    int i =4;
-     printf("3\n");
     while (k!='\n')
     {
-         printf("%i\n",i);
         k=fgetc(file2);
-        i++;
     }
     return k;
 }
