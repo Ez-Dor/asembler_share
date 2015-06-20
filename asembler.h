@@ -3,12 +3,13 @@
 #define OPERAND1 3
 #define OPERAND2 4
 #define MAX_INPUT 31
+#define TRUE 1
+#define FALSE 0
 
-typedef struct
-{
-    char label [MAX_INPUT];
-    char command [MAX_INPUT];
-    char operand1 [MAX_INPUT];
-    char operand2 [MAX_INPUT];
-    int address;
-} matrixLine;
+/*Function prototype*/
+int lineCounter(FILE *file);
+void printLine(int i);
+void printMatrix();
+char* getParam(int index, int param);
+void matrixParam(FILE *file);
+int checkCommand (char com[]);

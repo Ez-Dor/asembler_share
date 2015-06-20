@@ -3,14 +3,9 @@
 #include <stdlib.h>
 #include "asembler.h"
 
-/*prototype*/
-
-int matrixParam(FILE *file);
-
 int main()
 {
-
-    int i;
+    char* c;
     FILE *file = fopen ("input.txt", "r");
       if (file == NULL)
     {
@@ -18,6 +13,11 @@ int main()
         return 0;
     }
     matrixParam(file);
+    printMatrix();
+    c = getParam(5,COMMAND);
+    printf("%s",c);
+    if(checkCommand(c))
+        printf("Found");
     fclose(file);
     return 0;
 }

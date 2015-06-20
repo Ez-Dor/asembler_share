@@ -10,29 +10,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "asembler.h"
 
-#define TRUE 1
-#define FALSE 0
 
-/*Func Prototype*/
-int checkCommand (char com[]);
-/*
-int main()
-{
-    char command[31];
-    printf("Please insert command to test:\n");
-    scanf("%s", command);
-    printf("\nCommand is: %s\n", command);
-    printf("Length is: %d\n", strlen(command));
-    printf("Result is: %i\n", checkCommand(command));
 
-    return 0;
-}
-*/
 int checkCommand (char com[])
 {
 
-    printf("value recieved is %s\n", com);
 
     if      (!strcmp("mov1", com) || !(strcmp("mov2", com)))
         return TRUE;

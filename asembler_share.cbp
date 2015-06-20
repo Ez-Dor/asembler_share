@@ -51,8 +51,6 @@
 		<Unit filename="asembler.h" />
 		<Unit filename="commands.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
 		<Unit filename="lineCounter.c">
 			<Option compilerVar="CC" />
