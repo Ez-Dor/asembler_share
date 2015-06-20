@@ -3,6 +3,7 @@
 #define OPERAND1 3
 #define OPERAND2 4
 #define MAX_INPUT 31
+
 typedef struct
 {
     char label [MAX_INPUT];

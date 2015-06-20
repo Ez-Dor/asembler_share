@@ -7,6 +7,7 @@ Gets input commands from file, allocates memory and sorts them in a structure.
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdio.h>
+#include <string.h>
 #include "asembler.h"
 
 /*This is the structure for a line of command*/
@@ -30,7 +31,8 @@ void matrixParam (FILE *file)
     int addressCounter = 100;
     int i = 0;
     int j=0;
-
+    int x=0;
+    char temp [] = "abcdef";
     /*Use Line Counter to know how many lines are in the input file*/
     line = lineCounter(file);
     /*Set file pointer to start of file*/
@@ -51,14 +53,52 @@ void matrixParam (FILE *file)
         state = LABEL;
         if (s == '.')
         {
-/*DOR- Right now skips the line*/
-            s = otherFile (s,file);
+            x=0;
+            while (x<6 && s!=' ' && s!='\t' && s!='\n' && s!=EOF)
+            {
+                s=fgetc(file);
+                temp[x] = s;
+                x++;
+            }
+
+            if (strcmp("entry ", temp)==0)
+            {
+                FILE *ent = fopen("output.ent","a");
+                while (s!='\n' && s!=EOF)
+                {
+                    s=getc(file);
+                    fputc(s,ent);
+                }
+                fputc(s,ent);
+                fclose(ent);
+            }
+
+            else if (strcmp("extern", temp)==0)
+            {
+                FILE *ext = fopen("output.ext","a");
+                while (s!='\n' && s!=EOF)
+                {
+                    s=getc(file);
+                    fputc(s,ext);
+                }
+                fputc(s,ext);
+                fclose(ext);
+            }
+            else
+            {
+                while (s!='\n' && s!=EOF)
+                    s=getc(file);
+            }
         }
         else
         {
             if (s==' '||s=='\t')
             {
-                s=closeSpaces(s,file);
+                while (s!=' ' && s!='\t')
+                {
+
+                    s=fgetc(file);
+                }
                 state = COMMAND;
             }
             while (s!= '\n' && s != EOF)
@@ -166,8 +206,8 @@ void matrixParam (FILE *file)
 
                 s = fgetc(file);
             }
-        mat[i].address = addressCounter;
-        addressCounter++;
+            mat[i].address = addressCounter;
+            addressCounter++;
         }
         j=0;
 
@@ -176,27 +216,13 @@ void matrixParam (FILE *file)
 
 
     }
-    i=0;
-
-}
-
-char closeSpaces (char space, FILE *file1)
-{
-
-    while (space != ' ' && space != '\t')
+       i=0;
+        while (i<line)
     {
-
-        space=fgetc(file1);
+        printf("%s\t%s\t%s\t%s\t%i\n",mat[i].label,mat[i].command,mat[i].operand1,mat[i].operand2,mat[i].address);
+        i++;
     }
-    return space;
 }
 
-char otherFile (char k, FILE *file2)
-{
-    while (k!='\n')
-    {
-        k=fgetc(file2);
-    }
-    return k;
-}
+
 

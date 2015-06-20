@@ -25,16 +25,18 @@
 	<ctype.h>
 	<stdio.h>
 
-1434675427 source:c:\users\user\documents\school\20465\asembler_share\main.c
+1434798675 source:c:\users\user\documents\school\20465\asembler_share\main.c
 	<stdio.h>
 	<stdlib.h>
+	"asembler.h"
 
-1434796794 c:\users\user\documents\school\20465\asembler_share\asembler.h
+1434800646 c:\users\user\documents\school\20465\asembler_share\asembler.h
 
-1434796795 source:c:\users\user\documents\school\20465\asembler_share\metrixparam.c
+1434811083 source:c:\users\user\documents\school\20465\asembler_share\metrixparam.c
 	<stdlib.h>
 	<ctype.h>
 	<stdio.h>
+	<string.h>
 	"asembler.h"
 
 1434401376 source:c:\users\user\documents\school\20465\asembler_share\asembler.h
