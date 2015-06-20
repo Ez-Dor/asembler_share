@@ -10,15 +10,7 @@ Gets input commands from file, allocates memory and sorts them in a structure.
 #include "asembler.h"
 
 /*This is the structure for a line of command*/
-typedef struct
-{
-/*DOR - #define MAX_INPUT 31*/
-    char label [31];
-    char command [31];
-    char operand1 [31];
-    char operand2 [31];
-    int address;
-} metrixLine;
+
 
 /*Function prototype*/
 int lineCounter(FILE *file);
@@ -26,15 +18,12 @@ char otherFile (char k, FILE *file2);
 char closeSpaces (char space, FILE *file1);
 
 /*Global variable*/
-metrixLine *mat;
+matrixLine *mat;
 
-void metrixParam (FILE *file)
+void matrixParam (FILE *file)
 {
-<<<<<<< HEAD
-    /*Variables*/
-=======
 
->>>>>>> 2cc9cc23d4b8b3ecefe7d70346b3b0ef5d954af2
+    /*Variables*/
     char s;
     int state = LABEL;
     int line;
@@ -44,18 +33,12 @@ void metrixParam (FILE *file)
 
     /*Use Line Counter to know how many lines are in the input file*/
     line = lineCounter(file);
-
-    /*Set file pointer to start of file*/s
+    /*Set file pointer to start of file*/
     fseek(file,SEEK_SET,0);
-<<<<<<< HEAD
-/*Dor - CHECK THIS IS THE RIGHT PLACE*/
     s = fgetc(file);
 
     /*Allocate memory for the matrix according to the lines.*/
-=======
-    s = fgetc(file);
->>>>>>> 2cc9cc23d4b8b3ecefe7d70346b3b0ef5d954af2
-    mat = malloc(sizeof(metrixLine) * line);
+    mat = malloc(sizeof(matrixLine) * line);
 
     if (!mat)
     {
@@ -82,7 +65,7 @@ void metrixParam (FILE *file)
             {
                 if(state == LABEL)
                 {
-                    if(j == 31 && s != ':')
+                    if(j == MAX_INPUT && s != ':')
                     {
                         printf("Memory crashed - the label on line %i is more then 30 characters\n",i);
                         state = COMMAND;
@@ -92,12 +75,15 @@ void metrixParam (FILE *file)
                     {
                         if (j==0 && isalpha(s) == 0)
                         {
-/*DOR - FIX*/
                             printf("The first character on the label in line %i is wrong\n", i);
+                            mat[i].label[j] = s;
+                            j++;
                         }
                         else if (isalpha(s)== 0 && isdigit(s)==0 && j !=0 )
                         {
                             printf("Wrong character found on label in line %i\n", i);
+                            mat[i].label[j] = s;
+                            j++;
                         }
 
                         mat[i].label[j] = s;
@@ -113,7 +99,7 @@ void metrixParam (FILE *file)
                 }
                 else if (state == COMMAND)
                 {
-                    if (j==31 && s != ' ' && s != '\t')
+                    if (j==MAX_INPUT && s != ' ' && s != '\t')
                     {
                         printf("Memory crashed - the Command on line %i is too long\n",i);
                         state = OPERAND1;
@@ -139,7 +125,7 @@ void metrixParam (FILE *file)
                 }
                 else if (state == OPERAND1)
                 {
-                    if (j==31 && s != ' '&& s != '\t'&& s != ',')
+                    if (j==MAX_INPUT && s != ' '&& s != '\t'&& s != ',')
                     {
                         printf("Memory crashed - the operand1 on line %i is too long\n");
                         state = OPERAND2;
@@ -166,7 +152,7 @@ void metrixParam (FILE *file)
                 else if (state == OPERAND2)
                 {
 
-                    if (j==31 && s != ' ' && s != '\t')
+                    if (j==MAX_INPUT && s != ' ' && s != '\t')
                     {
                         printf("Memory crashed - the operand2 on line %i is too long\n");
                         exit(0);
@@ -180,21 +166,18 @@ void metrixParam (FILE *file)
 
                 s = fgetc(file);
             }
-
+        mat[i].address = addressCounter;
+        addressCounter++;
         }
         j=0;
-        mat[i].address = addressCounter+i;
+
         i++;
         s = fgetc(file);
 
 
     }
     i=0;
-    while (i<line)
-    {
-        printf("%s\t%s\t%s\t%s\t%i\n",mat[i].label,mat[i].command,mat[i].operand1,mat[i].operand2,mat[i].address);
-        i++;
-    }
+
 }
 
 char closeSpaces (char space, FILE *file1)
