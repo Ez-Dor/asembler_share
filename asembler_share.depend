@@ -46,13 +46,29 @@
 	<ctype.h>
 	<stdio.h>
 
-1434729787 source:h:\projc\asembler_share\main.c
+1434904848 source:h:\projc\asembler_share\main.c
 	<stdio.h>
 	<stdlib.h>
+	"asembler.h"
 
 1434817293 source:c:\users\user\documents\school\20465\asembler_share\commands.c
 	<stdio.h>
 	<stdlib.h>
+	<string.h>
+	"asembler.h"
+
+1434903912 source:h:\projc\asembler_share\commands.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"asembler.h"
+
+1434904439 h:\projc\asembler_share\asembler.h
+
+1434904870 source:h:\projc\asembler_share\metrixparam.c
+	<stdlib.h>
+	<ctype.h>
+	<stdio.h>
 	<string.h>
 	"asembler.h"
 

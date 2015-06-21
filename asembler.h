@@ -13,3 +13,4 @@ void printMatrix();
 char* getParam(int index, int param);
 void matrixParam(FILE *file);
 int checkCommand (char com[]);
+int checkAllCommands ();

@@ -266,3 +266,22 @@ char* getParam(int index, int param)
         return "error";
 }
 
+int checkAllCommands ()
+{
+    int i = 1;
+    int flag = TRUE;
+    while (i<line)
+    {
+        if(checkCommand(getParam(i, COMMAND)))
+        {
+            printf("Found command: %s\n", mat[i].command);
+        }
+        else
+        {
+            printf("Found wrong command: %s\n", mat[i].command);
+            flag=FALSE;
+        }
+        i++;
+    }
+    return flag;
+}

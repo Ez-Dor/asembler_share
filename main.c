@@ -15,9 +15,8 @@ int main()
     matrixParam(file);
     printMatrix();
     c = getParam(5,COMMAND);
-    printf("%s",c);
-    if(checkCommand(c))
-        printf("Found");
+    printf("%s\n",c);
+    checkAllCommands();
     fclose(file);
     return 0;
 }
