@@ -14,9 +14,11 @@ int main()
     }
     matrixParam(file);
     printMatrix();
-    c = getParam(5,COMMAND);
+
+   c = getParam(5,COMMAND);
     printf("%s\n",c);
-    checkAllCommands();
+    printf("%i",checkAllCommands());
+    freeMatrixParam();
     fclose(file);
     return 0;
 }
