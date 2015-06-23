@@ -1,6 +1,7 @@
 /*
-Matrix Parameters by Dor A & Lior F
-Gets input commands from file, allocates memory and sorts them in a structure.
+Build Matrix by Dor A & Lior F
+Gets input from file, allocates memory and sorts them in a structure.
+Include methods to get set and print the data on the memory
 */
 
 /*Include standard libraries and custom header*/
@@ -17,25 +18,24 @@ typedef struct
     char command [MAX_INPUT];
     char operand1 [MAX_INPUT];
     char operand2 [MAX_INPUT];
-    int address;
 } matrixLine;
 
 
 /*Global variable*/
 matrixLine *mat;
 int line;
-void matrixParam (FILE *file)
+int buildMetrix (FILE *file)
 {
 
     /*Variables*/
     char s;
     int state = LABEL;
-    int addressCounter = 100;
     int emptyLines=0;
     int i=1;
     int j=0;
     int x=0;
     int y=0;
+    int flag = TRUE;
     char temp [] = "abcdef";
     /*Overwrite old files*/
     FILE *ent = fopen("output.ent","w");
@@ -59,8 +59,18 @@ void matrixParam (FILE *file)
     while (i<=line)
     {
         state = LABEL;
+        /*If have a comment skip line*/
+        if (s==';')
+            {
+                while (s!='\n')
+                {
+
+                    s=fgetc(file);
+                }
+                y++;
+            }
         /*Checks if there is any data that needs to go to external files and outputs it*/
-        if (s == '.')
+        else if (s == '.')
         {   y++;
             line--;
             x=0;
@@ -98,11 +108,13 @@ void matrixParam (FILE *file)
             /*If neither, skip the row and print error*/
             else
             {
+                flag = FALSE;
                 printf("Error! Wrong input in line %i", i+y-1);
                 while (s!='\n' && s!=EOF)
                     s=getc(file);
             }
         }
+
         /*Done with entries and other things, run the rest of the input*/
         else
         {
@@ -123,6 +135,7 @@ void matrixParam (FILE *file)
                 {
                     if(j == MAX_INPUT && s != ':')
                     {
+                        flag = FALSE;
                         printf("Memory crashed - the label on line %i is more then 30 characters\n",i+y);
                         state = COMMAND;
                         j = 0;
@@ -131,17 +144,19 @@ void matrixParam (FILE *file)
                     {
                         if (j==0 && isalpha(s) == 0)
                         {
+                            flag = FALSE;
                             printf("The first character on the label in line %i is wrong\n", i+y);
                             mat[i].label[j] = s;
                             j++;
                         }
                         else if (isalpha(s)== 0 && isdigit(s)==0 && j !=0 )
                         {
+                            flag = FALSE;
                             printf("Wrong character found on label in line %i\n", i+y);
                             mat[i].label[j] = s;
                             j++;
                         }
-                       /* printf("%i %i\t",i,j);*/
+
                         mat[i].label[j] = s;
                         j++;
 
@@ -159,6 +174,7 @@ void matrixParam (FILE *file)
                 {
                     if (j==MAX_INPUT && s != ' ' && s != '\t')
                     {
+                        flag = FALSE;
                         printf("Memory crashed - the Command on line %i is too long\n",i+y);
                         state = OPERAND1;
                         j = 0;
@@ -186,16 +202,12 @@ void matrixParam (FILE *file)
                 {
                     if (j==MAX_INPUT && s != ' '&& s != '\t'&& s != ',')
                     {
+                        flag = FALSE;
                         printf("Memory crashed - the operand1 on line %i is too long\n",i+y);
                         state = OPERAND2;
                         j=0;
                     }
-                    else if (j==0 && s != ' ' && s != '\t' && s != ',')
-                    {
-                        mat[i].operand1[j] = s;
-                        j++;
-                    }
-                    else if (j>0 && s!=' '&& s!='\t' && s != ',')
+                    else if (j>=0 && s != ' ' && s != '\t' && s != ',')
                     {
                         mat[i].operand1[j] = s;
                         j++;
@@ -213,10 +225,11 @@ void matrixParam (FILE *file)
 
                     if (j==MAX_INPUT && s != ' ' && s != '\t')
                     {
+                        flag = FALSE;
                         printf("Memory crashed - the operand2 on line %i is too long\n",i+y);
                         exit(0);
                     }
-                    else if (j<MAX_INPUT)
+                    else if (j<MAX_INPUT && s!=' ' && s!='\t')
                     {
                         mat[i].operand2[j] = s;
                         j++;
@@ -225,8 +238,6 @@ void matrixParam (FILE *file)
 
                 s = fgetc(file);
             }
-            mat[i].address = addressCounter;
-            addressCounter++;
             i++;
         }
         j=0;
@@ -242,6 +253,7 @@ void matrixParam (FILE *file)
         free(mat[emptyLines].operand2);
         emptyLines--;
     }
+    return flag;
 }
 /*Prints a line of the matrix*/
 void printLine(int i)
@@ -264,7 +276,7 @@ void printMatrix()
     }
 }
 
-char* getParam(int index, int param)
+char* getData(int index, int param)
 {
     if(index>line)
      return "Index out of bounds";
@@ -284,25 +296,7 @@ char* getParam(int index, int param)
         return "Error parameter was not found";
 }
 
-int checkAllCommands ()
-{
-    int i=1;
-    int flag = TRUE;
-    while (i<=line)
-    {
-        if(checkCommand(getParam(i, COMMAND)))
-        {
-            printf("Found command: %s\n", mat[i].command);
-        }
-        else
-        {
-            printf("Found wrong command: %s\n", mat[i].command);
-            flag=FALSE;
-        }
-        i++;
-    }
-    return flag;
-}
+
 
 /*Set ant parameter on our matrix - *does not work yet Dor fix* */
 void setParam (int index, int param,char newParam [])
@@ -310,16 +304,16 @@ void setParam (int index, int param,char newParam [])
     if(index<=line)
     {
       if (param == LABEL)
-        *mat[index].label = newParam;
+        *mat[index].label = &newParam;
 
     else if (param == COMMAND)
-        *mat[index].command = newParam;
+        *mat[index].command = &newParam;
 
     else if (param == OPERAND1)
-        *mat[index].operand1 = newParam;
+        *mat[index].operand1 = &newParam;
 
     else if (param == OPERAND2)
-        *mat[index].operand2 = newParam;
+        *mat[index].operand2 = &newParam;
     }
 
     else

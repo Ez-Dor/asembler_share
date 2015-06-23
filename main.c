@@ -4,7 +4,7 @@
 #include "asembler.h"
 
 int main()
-{
+{ int flag;
     char* c;
     FILE *file = fopen ("input.txt", "r");
       if (file == NULL)
@@ -12,10 +12,10 @@ int main()
         printf("File does not exist");
         return 0;
     }
-    matrixParam(file);
+    flag = buildMetrix(file);
     printMatrix();
 
-   c = getParam(5,COMMAND);
+     c = getData(11,OPERAND1);
     printf("%s\n",c);
     printf("%i",checkAllCommands());
     freeMatrixParam();

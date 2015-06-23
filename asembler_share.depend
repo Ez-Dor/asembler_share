@@ -25,12 +25,12 @@
 	<ctype.h>
 	<stdio.h>
 
-1434988944 source:c:\users\user\documents\school\20465\asembler_share\main.c
+1435096520 source:c:\users\user\documents\school\20465\asembler_share\main.c
 	<stdio.h>
 	<stdlib.h>
 	"asembler.h"
 
-1434976788 c:\users\user\documents\school\20465\asembler_share\asembler.h
+1435096520 c:\users\user\documents\school\20465\asembler_share\asembler.h
 
 1434988853 source:c:\users\user\documents\school\20465\asembler_share\metrixparam.c
 	<stdlib.h>
@@ -66,6 +66,19 @@
 1434904439 h:\projc\asembler_share\asembler.h
 
 1434904870 source:h:\projc\asembler_share\metrixparam.c
+	<stdlib.h>
+	<ctype.h>
+	<stdio.h>
+	<string.h>
+	"asembler.h"
+
+1435092148 source:c:\users\user\documents\school\20465\asembler_share\firslavelcheckmethod.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"asembler.h"
+
+1435096796 source:c:\users\user\documents\school\20465\asembler_share\inputdb.c
 	<stdlib.h>
 	<ctype.h>
 	<stdio.h>

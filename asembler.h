@@ -10,7 +10,7 @@
 int lineCounter(FILE *file);
 void printLine(int i);
 void printMatrix();
-char* getParam(int index, int param);
-void matrixParam(FILE *file);
+char* getData(int index, int param);
+int buildMatrix(FILE *file);
 int checkCommand (char com[]);
 int checkAllCommands ();

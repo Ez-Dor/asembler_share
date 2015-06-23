@@ -49,16 +49,16 @@
 			<Add directory="C:/Users/USER/Dropbox/asembler_share/" />
 		</Linker>
 		<Unit filename="asembler.h" />
-		<Unit filename="commands.c">
+		<Unit filename="firsLavelCheckMethod.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="inputDB.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="lineCounter.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="main.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="metrixParam.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>
