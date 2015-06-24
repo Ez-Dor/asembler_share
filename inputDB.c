@@ -260,7 +260,7 @@ void printLine(int i)
 {
     /*Print line I*/
     if(i<=line)
-        printf("%s\t%s\t%s\t%s\t%i\n",mat[i].label,mat[i].command,mat[i].operand1,mat[i].operand2,mat[i].address);
+        printf("%s\t%s\t%s\t%s\n",mat[i].label,mat[i].command,mat[i].operand1,mat[i].operand2);
     else
         printf("error line %i does not exist",i);
 }
@@ -271,7 +271,7 @@ void printMatrix()
     int i=1;
     while(i<=line)
     {
-        printf("%s\t%s\t%s\t%s\t%i\n",mat[i].label,mat[i].command,mat[i].operand1,mat[i].operand2,mat[i].address);
+        printf("%s\t%s\t%s\t%s\n",mat[i].label,mat[i].command,mat[i].operand1,mat[i].operand2);
         i++;
     }
 }
@@ -298,22 +298,22 @@ char* getData(int index, int param)
 
 
 
-/*Set ant parameter on our matrix - *does not work yet Dor fix* */
-void setParam (int index, int param,char newParam [])
+/*Set a parameter on our matrix */
+void setData (int index, int param,char data [])
 {
     if(index<=line)
     {
       if (param == LABEL)
-        *mat[index].label = &newParam;
+        strcpy(mat[index].label,data);
 
     else if (param == COMMAND)
-        *mat[index].command = &newParam;
+        strcpy(mat[index].command,data);
 
     else if (param == OPERAND1)
-        *mat[index].operand1 = &newParam;
+        strcpy (mat[index].operand1,data);
 
     else if (param == OPERAND2)
-        *mat[index].operand2 = &newParam;
+        strcpy(mat[index].operand2,data);
     }
 
     else

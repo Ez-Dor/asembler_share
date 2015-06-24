@@ -62,7 +62,7 @@ int checkCommand (char com[])
         return FALSE;
 }
 
-/*Run all over the the matrix withe the input and use checkCommands to get validation */
+/*Run all over the the matrix with the input and use checkCommands to get validation */
 int checkAllCommands ()
 {
     extern int line;
@@ -78,6 +78,35 @@ int checkAllCommands ()
         {
             printf("Found wrong command: %s\n", getData(i, COMMAND));
             flag=FALSE;
+        }
+        i++;
+    }
+    return flag;
+}
+
+/*Run all over the input and check for one label*/
+int checkLabels ()
+{
+    char temp1 [31];
+    char temp2 [31];
+    extern int line;
+    int i=1;
+    int j=1;
+    int flag = TRUE;
+    while (i<=line)
+    {
+        strcpy(temp1,getData(i,LABEL));
+        while (j<=line)
+        {
+            strcpy(temp2,getData(j,LABEL));
+            if (j!=i && strlen(temp1) != 0 && strlen(temp2) != 0)
+            {
+                if(strcmp(temp1,temp2)==0)
+                    return flag = FALSE;
+
+            }
+
+         j++;
         }
         i++;
     }

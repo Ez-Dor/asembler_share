@@ -14,10 +14,13 @@ int main()
     }
     flag = buildMetrix(file);
     printMatrix();
-
-     c = getData(11,OPERAND1);
-    printf("%s\n",c);
-    printf("%i",checkAllCommands());
+    printf("\n%i",checkLabels());
+    c = getData(4,LABEL);
+    /*printf("%s\n",c);*/
+    /*printf("%i",checkAllCommands());*/
+    setData(1,LABEL,c);
+    printf("\n%i",checkLabels());
+    /*printMatrix();*/
     freeMatrixParam();
     fclose(file);
     return 0;
