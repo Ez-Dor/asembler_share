@@ -30,7 +30,7 @@ int buildMetrix (FILE *file)
     /*Variables*/
     char s;
     int state = LABEL;
-    int emptyLines=0;
+    int allLines=0;
     int i=1;
     int j=0;
     int x=0;
@@ -243,15 +243,51 @@ int buildMetrix (FILE *file)
         j=0;
         s = fgetc(file);
     }
-    /*Free all the empty lines on our matrix*/
-    emptyLines = line+y;
-    while (line<emptyLines)
+/*Now check if have ant ext or ent that insrt to command cuz the line doesn't start wit dot - and fix it*/
+    i=0;
+    while (i<=line)
     {
-        free(mat[emptyLines].label);
-        free(mat[emptyLines].command);
-        free(mat[emptyLines].operand1);
-        free(mat[emptyLines].operand2);
-        emptyLines--;
+        x=0;
+        strcpy(temp,mat[i].command);
+        if (strcmp(".entry", temp)==0)
+            {
+                FILE *ent = fopen("output.ent","a");
+                fputs(mat[i].operand1,ent);
+                fclose(ent);
+                x=1;
+            }
+        else if (strcmp(".extern", temp)==0)
+            {
+                FILE *ext = fopen("output.ext","a");
+                fputs(mat[i].operand1,ext);
+                fclose(ext);
+                x=1;
+            }
+        if(x!=0)
+       {
+           j=i;
+           while (j<line)
+           {
+               strcpy(mat[j].label,mat[j+1].label);
+               strcpy(mat[j].command,mat[j+1].command);
+               strcpy(mat[j].operand1,mat[j+1].operand1);
+               strcpy(mat[j].operand2,mat[j+1].operand2);
+               j++;
+           }
+           line--;
+           y++;
+       }
+       i++;
+    }
+    /*Free all the empty lines on our matrix*/
+    allLines = line+y;
+    while (line<allLines)
+    {
+        free(mat[allLines].label);
+        free(mat[allLines].command);
+        free(mat[allLines].operand1);
+        free(mat[allLines].operand2);
+        allLines--;
     }
     return flag;
 }
@@ -278,7 +314,7 @@ void printMatrix()
 
 char* getData(int index, int param)
 {
-    if(index>line)
+    if(index>line || index<1)
      return "Index out of bounds";
     if (param == LABEL)
         return mat[index].label;
@@ -301,7 +337,7 @@ char* getData(int index, int param)
 /*Set a parameter on our matrix */
 void setData (int index, int param,char data [])
 {
-    if(index<=line)
+    if(index>line || index<1)
     {
       if (param == LABEL)
         strcpy(mat[index].label,data);
