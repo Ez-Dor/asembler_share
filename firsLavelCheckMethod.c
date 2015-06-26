@@ -2,64 +2,89 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "asembler.h"
 
-
-/*Accepts a string value and checks if it's a legal command.*/
-int checkCommand (char com[])
+/*Check command and its operands in line i*/
+int checkCommand (char com[], int i)
 {
+    /*Two operand required for these commands*/
+    if (    !strcmp("mov1", com) || !strcmp("mov2", com) ||
+            !strcmp("cmp1", com) || !strcmp("cmp2", com) ||
+            !strcmp("add1", com) || !strcmp("add2", com) ||
+            !strcmp("sub1", com) || !strcmp("sub2", com) ||
+            !strcmp("lea1", com) || !strcmp("lea2", com))
+    {
+        if (strlen(getData(i, OPERAND1)) != 0 && strlen(getData(i, OPERAND2)) != 0)
+            return TRUE;
+        else
+        {
+            printf("Did not find two operands for command %s in line %i\n", com, getInputLine(i));
+            return FALSE;
+        }
+    }
 
+    /*One operand required for these commands*/
+    if(     !strcmp("clr1", com) || !strcmp("clr2", com) ||
+            !strcmp("inc1", com) || !strcmp("inc2", com) ||
+            !strcmp("dec1", com) || !strcmp("dec2", com) ||
+            !strcmp("jmp1", com) || !strcmp("jmp2", com) ||
+            !strcmp("bne1", com) || !strcmp("bne2", com) ||
+            !strcmp("red1", com) || !strcmp("red2", com) ||
+            !strcmp("prn1", com) || !strcmp("prn2", com) ||
+            !strcmp("jsr1", com) || !strcmp("jsr2", com) )
+    {
+        if (strlen(getData(i, OPERAND1)) != 0 && strlen(getData(i, OPERAND2)) == 0)
+            return TRUE;
 
-    if      (!strcmp("mov1", com) || !(strcmp("mov2", com)))
+        else
+        {
+            printf("Found none or more than one operand in command %s in line %i\n", com, getInputLine(i));
+            return FALSE;
+        }
+    }
+
+    /*Special case not*/
+    if (!strcmp("not1", com) || !strcmp("not2", com))
+    {
+        if (strlen(getData(i, OPERAND1)) != 0 && strlen(getData(i, OPERAND2)) == 0)
+            if (isRegister(getData(i, OPERAND1)))
+                return TRUE;
+            else
+            {
+                printf("Command %s in line %i must get a register as an operand\n", com, getInputLine(i));
+                return FALSE;
+            }
+        else
+        {
+            printf("Found none or more than one operand in command %s in line %i\n", com, getInputLine(i));
+            return FALSE;
+        }
+
+    }
+
+    /*No Operator required for these commands*/
+    if (    !strcmp("rts1", com) || !strcmp("rts2", com) ||
+            !strcmp("stop1", com) || !strcmp("stop2", com))
+    {
+        if (strlen(getData(i, OPERAND1)) == 0 && strlen(getData(i, OPERAND2)) == 0)
+            return TRUE;
+        else
+        {
+            printf("Found an operand for command %s in line %i\n", com, getInputLine(i));
+            return FALSE;
+        }
+    }
+
+    /*string or data?*/
+    if (!strcmp(".string", com) || !strcmp(".data", com))
+    {
         return TRUE;
+    }
 
-    else if (!strcmp("cmp1", com) || !(strcmp("cmp2", com)))
-        return TRUE;
+    printf("Found wrong command %s in line %i\n",com, getInputLine(i));
 
-    else if (!strcmp("add1", com) || !(strcmp("add2", com)))
-        return TRUE;
-
-    else if (!strcmp("sub1", com) || !(strcmp("sub2", com)))
-        return TRUE;
-
-    else if (!strcmp("lea1", com) || !(strcmp("lea2", com)))
-        return TRUE;
-
-    else if (!strcmp("not1", com) || !(strcmp("not2", com)))
-        return TRUE;
-
-    else if (!strcmp("clr1", com) || !(strcmp("clr2", com)))
-        return TRUE;
-
-    else if (!strcmp("inc1", com) || !(strcmp("inc2", com)))
-        return TRUE;
-
-    else if (!strcmp("dec1", com) || !(strcmp("dec2", com)))
-        return TRUE;
-
-    else if (!strcmp("jmp1", com) || !(strcmp("jmp2", com)))
-        return TRUE;
-
-    else if (!strcmp("bne1", com) || !(strcmp("bne2", com)))
-        return TRUE;
-
-    else if (!strcmp("red1", com) || !(strcmp("red2", com)))
-        return TRUE;
-
-    else if (!strcmp("prn1", com) || !(strcmp("prn2", com)))
-        return TRUE;
-
-    else if (!strcmp("jsr1", com) || !(strcmp("jsr2", com)))
-        return TRUE;
-
-    else if (!strcmp("rts1", com) || !(strcmp("rts2", com)))
-        return TRUE;
-
-    else if (!strcmp("stop1", com) || !(strcmp("stop2", com)))
-        return TRUE;
-
-    else
-        return FALSE;
+    return FALSE;
 }
 
 /*Run all over the the matrix with the input and use checkCommands to get validation */
@@ -70,17 +95,11 @@ int checkAllCommands ()
     int flag = TRUE;
     while (i<=line)
     {
-        if(checkCommand(getData(i, COMMAND)))
-        {
-            printf("Found command: %s\n", getData(i, COMMAND));
-        }
-        else
-        {
-            printf("Found wrong command: %s\n", getData(i, COMMAND));
+        if(!checkCommand(getData(i, COMMAND), i))
             flag=FALSE;
-        }
         i++;
     }
+
     return flag;
 }
 
@@ -106,9 +125,137 @@ int checkLabels ()
 
             }
 
-         j++;
+            j++;
         }
         i++;
     }
     return flag;
+}
+/*
+int checkOperands ()
+{
+    if (two operands)
+        checkOperand1
+        checkOperand2
+
+    if (one operand)
+        if not, must be register
+        else if is label/register
+        else error
+    return
+}*/
+int checkOperand1 (char oper[], int i)
+{
+    extern int line;
+    int temp[31];
+    int x=1;
+    int flag = FALSE;
+    int j;
+    int length = strlen(oper);
+    int counter =0;
+    char* s = " ";
+
+    /*NUMBER*/
+    if (oper[0] == '#')
+    {
+        if (length<2)
+        {
+            printf("Wrong operand %s in line %i\n", oper, i);
+        }
+        else if (length==2)
+        {
+            if (isdigit(oper[1]))
+                flag = TRUE;
+            else
+                printf("Wrong operand %s in line %i, # must be followed by a number \n", oper, i);
+        }
+        if (length>2)
+        {
+            flag = TRUE;
+            for(j=2; j==length-1; i++)
+            {
+                if (!isdigit(oper[i]))
+                    flag = FALSE;
+            }
+        }
+    }/*end number*/
+    else if (isRegister(oper))
+        flag = TRUE;
+    else if (strcmp(oper, "$$"))
+    {
+        if (i==1)
+            printf("Illegal operand %s in line %i, cannot be used in the first line of the program", oper, getInputLine(i));
+        else if (checkOperand1(getData(i-1,OPERAND1), i-1))
+        {
+            setData(i, OPERAND1,getData(i-1, OPERAND1));
+            flag = TRUE;
+        }
+    }
+    else
+    {
+        FILE *fp = fopen("input.ext","r");
+        while (s)
+        {
+            fscanf(fp, s);
+            if (strcmp(s,oper))
+            {
+                flag =TRUE;
+                s = NULL;
+            }
+        }
+        fclose(fp);
+      if(isLabel(oper,OPERAND1)==2)
+            flag = TRUE;
+      else
+        printf("Operand %s in line %i is not declared",oper,getInputLine(i));
+    }
+    return flag;
+}
+
+int checkOperand2 (char oper[], int i)
+{
+    int flag = FALSE;
+    if (isLabel(oper, OPERAND2))
+        flag = TRUE;
+    else if (isRegister(oper))
+        flag = TRUE;
+
+    else
+        printf("Illegal operand %s in line %i", oper, i);
+
+    return flag;
+}
+
+int isLabel(char operand[], int param)
+{
+    extern int line;
+    int i = 1;
+    int flag = FALSE;
+    while (i<line)
+    {
+        /*Check in the label column*/
+        if (strcmp(getData(i, param), operand) == 0)
+        {
+            flag = TRUE;
+            if (strcmp(getData(i,COMMAND),".string")==0)
+                return flag+1;
+            else if(strcmp(getData(i,COMMAND),".data")==0)
+                return flag+1;
+            else
+                return flag;
+        }
+        i++;
+    }
+
+    return flag;
+}
+
+int isRegister(char oper[])
+{
+    if (!strcmp(oper, "r0") || !strcmp(oper, "r1") ||
+            !strcmp(oper, "r2") || !strcmp(oper, "r3") ||
+            !strcmp(oper, "r4") || !strcmp(oper, "r5") ||
+            !strcmp(oper, "r6") || !strcmp(oper, "r7") )
+        return TRUE;
+    return FALSE;
 }

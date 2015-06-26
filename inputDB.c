@@ -18,17 +18,19 @@ typedef struct
     char command [MAX_INPUT];
     char operand1 [MAX_INPUT];
     char operand2 [MAX_INPUT];
+    int inputLine;
 } matrixLine;
 
 
 /*Global variable*/
 matrixLine *mat;
 int line;
-int buildMetrix (FILE *file)
+int buildMatrix (FILE *file)
 {
 
     /*Variables*/
     char s;
+    int counter=1;
     int state = LABEL;
     int allLines=0;
     int i=1;
@@ -49,7 +51,7 @@ int buildMetrix (FILE *file)
     s = fgetc(file);
 
     /*Allocate memory for the matrix according to the lines.*/
-    mat = malloc(sizeof(matrixLine) * line);
+    mat = calloc(line, sizeof(matrixLine));
     if (!mat)
     {
         printf("Memory allocation failed");
@@ -58,6 +60,8 @@ int buildMetrix (FILE *file)
 
     while (i<=line)
     {
+        mat[i].inputLine = counter;
+        counter++;
         state = LABEL;
         /*If have a comment skip line*/
         if (s==';')
@@ -121,12 +125,19 @@ int buildMetrix (FILE *file)
             /*If the line is not a label, we skip spaces*/
             if (s==' '||s=='\t')
             {
-                while (s==' ' || s=='\t')
+                while ((s==' ' && s!='\n' && s != EOF) || (s=='\t'&& s!='\n' && s != EOF))
                 {
 
                     s=fgetc(file);
                 }
-                state = COMMAND;
+                if (s=='\n' || s == EOF)
+                {
+                    line--;
+                    y++;
+                }
+
+                else
+                    state = COMMAND;
             }
             /*Insert elements into the structure by states*/
             while (s!= '\n' && s != EOF)
@@ -272,6 +283,7 @@ int buildMetrix (FILE *file)
                strcpy(mat[j].command,mat[j+1].command);
                strcpy(mat[j].operand1,mat[j+1].operand1);
                strcpy(mat[j].operand2,mat[j+1].operand2);
+               mat[j].inputLine = mat[j+1].inputLine;
                j++;
            }
            line--;
@@ -287,6 +299,7 @@ int buildMetrix (FILE *file)
         free(mat[allLines].command);
         free(mat[allLines].operand1);
         free(mat[allLines].operand2);
+        free(&mat[allLines].inputLine);
         allLines--;
     }
     return flag;
@@ -307,6 +320,7 @@ void printMatrix()
     int i=1;
     while(i<=line)
     {
+        printf("%i  ",mat[i].inputLine);
         printf("%s\t%s\t%s\t%s\n",mat[i].label,mat[i].command,mat[i].operand1,mat[i].operand2);
         i++;
     }
@@ -332,12 +346,19 @@ char* getData(int index, int param)
         return "Error parameter was not found";
 }
 
+int getInputLine (int i)
+{
+    if(i>line || i<0)
+        return 0;
+    else
+        return mat[i].inputLine;
+}
 
 
 /*Set a parameter on our matrix */
 void setData (int index, int param,char data [])
 {
-    if(index>line || index<1)
+    if(index<=line || index>=1)
     {
       if (param == LABEL)
         strcpy(mat[index].label,data);
@@ -353,19 +374,22 @@ void setData (int index, int param,char data [])
     }
 
     else
-        printf ("Error, parameter or index out of bounds");
+        printf ("Error, parameter or index out of bound\n");
 }
 
 /*Free all memory of mat*/
-void freeMatrixParam ()
+void freeMatrixMem ()
 {
-    int i=0;
-        while (i<line)
+    free(mat);
+    /*int i=0;
+    while(i<=line)
     {
         free(mat[i].label);
         free(mat[i].command);
         free(mat[i].operand1);
         free(mat[i].operand2);
+        free(mat[i].inputLine);
         i++;
-    }
+    }*/
+
 }

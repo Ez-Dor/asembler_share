@@ -15,4 +15,4 @@ END: 	stop1
 STR: 	.string "abcdef"
 LENGTH: .data 6,-9,15
 K: 		.data 2 
-                 
+            
