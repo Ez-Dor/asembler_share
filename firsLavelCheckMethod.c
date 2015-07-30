@@ -243,7 +243,7 @@ int isLabel(char operand[], int param)
         i++;
     }
     FILE *fp = fopen("output.ext","r");
-    for((fscanf(fp,c));c!=EOF;(fscanf(fp,c)))
+    for((fscanf(fp,c)); c!=EOF; (fscanf(fp,c)))
     {
         if(!strcmp(operand,c))
         {
@@ -273,27 +273,72 @@ int changeDollars()
     extern int line;
     char temp [MAX_INPUT];
     int i=1;
+    int flag = TRUE;
+    /*Operand one checks*/
     strcpy(temp,getData(i,OPERAND1));
     if (!strcmp(temp,"$$"))
     {
         printf("Illegal operand %s in line %i, cannot be used in the first line of the program\n", temp, getInputLine(i));
-        return FALSE;
+        flag = FALSE;
     }
     for (i=2; i<=line; i++)
     {
         strcpy(temp,getData(i,OPERAND1));
         if (!strcmp(temp,"$$"))
         {
+            if(!strcmp(getData(i,COMMAND),"lea1")||!strcmp(getData(i,COMMAND),"lea2"))
+            {
+                printf("Illegal operand %s in line %i, cannot be used in the \"lea\" command\n", temp, getInputLine(i));
+                flag = FALSE;
+            }
             if(strlen(getData(i-1,OPERAND1))<=1)
             {
                 printf("Illegal operand %s in line %i, previous operand missing\n", temp, getInputLine(i));
-                return FALSE;
+                flag = FALSE;
             }
             strcpy(temp,getData(i-1,OPERAND1));
             setData(i,OPERAND1,temp);
         }
     }
-    return TRUE;
+    /*Operand2 checks*/
+    strcpy(temp,getData(i,OPERAND2));
+    if (!strcmp(temp,"$$"))
+    {
+        printf("Illegal operand %s in line %i, cannot be used in the first line of the program\n", temp, getInputLine(i));
+        flag = FALSE;
+    }
+    for (i=2; i<=line; i++)
+    {
+        strcpy(temp,getData(i,OPERAND2));
+        if (!strcmp(temp,"$$"))
+        {
+            if(!strcmp(getData(i,COMMAND),"cmp1")||!strcmp(getData(i,COMMAND),"cmp2")||
+                    !strcmp(getData(i,COMMAND),"jmp1")||!strcmp(getData(i,COMMAND),"jmp2")||
+                    !strcmp(getData(i,COMMAND),"bne1")||!strcmp(getData(i,COMMAND),"bne2")||
+                    !strcmp(getData(i,COMMAND),"red1")||!strcmp(getData(i,COMMAND),"red2")||
+                    !strcmp(getData(i,COMMAND),"prn1")||!strcmp(getData(i,COMMAND),"prn2"))
+            {
+                if(strlen(getData(i-1,OPERAND2))<=1)
+                {
+                    printf("Illegal operand %s in line %i, previous operand missing\n", temp, getInputLine(i));
+                    flag = FALSE;
+                }
+                else
+                {
+                    strcpy(temp,getData(i-1,OPERAND2));
+                    setData(i,OPERAND2,temp);
+                }
+
+            }
+            else
+            {
+                printf("Illegal operand %s in line %i, cannot be used in the %s command\n", temp, getInputLine(i),getData(i,COMMAND));
+                flag = FALSE;
+            }
+
+        }
+    }
+    return flag;
 }
 
 
@@ -301,7 +346,7 @@ int strlenWithoutSpace(char c[])
 {
     int i,count;
     int len=strlen(c);
-    for (count=0,i=0;i<len;i++)
+    for (count=0,i=0; i<len; i++)
         if(!isspace(c[i]))
             count++;
     return count;
