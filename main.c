@@ -5,7 +5,7 @@
 
 int main(){
     int flag;
-    char* c;
+    char* c = "           ";
     FILE *file = fopen ("input.txt", "r");
       if (file == NULL)
     {
@@ -13,18 +13,19 @@ int main(){
         return 0;
     }
     flag = buildMatrix(file);
+    if(!flag)
+    {
+        printf("error!!!!!");
+        exit(0);
+    }
+    changeDollars();
     printMatrix();
 
-/*    printf("\n%i",checkLabels());
-    c = getData(4,OPERAND2);
-    setData(4,OPERAND2,getData(1,OPERAND2));
-    setData(1,OPERAND2,c);
-    printf("%s\n",c);
-    printf("Result is: %i\n",checkAllCommands());
-   printf("result for %s: %d\n", getData(1, OPERAND1), checkOperand1(getData(1, OPERAND1), 1));
-   setData(1,LABEL,c);
-   printf("\n%i",checkLabels());
-   printMatrix();*/
+  printf("\n%i",checkLabels());
+  printf("\n%i",flag);
+  printf("\n%i",checkAllCommands());
+
+
   freeMatrixMem();
     fclose(file);
     return 0;

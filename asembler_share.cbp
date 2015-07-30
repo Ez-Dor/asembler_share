@@ -55,9 +55,6 @@
 		<Unit filename="inputDB.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="lineCounter.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>

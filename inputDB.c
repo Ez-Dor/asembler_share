@@ -254,7 +254,7 @@ int buildMatrix (FILE *file)
         j=0;
         s = fgetc(file);
     }
-/*Now check if have ant ext or ent that insrt to command cuz the line doesn't start wit dot - and fix it*/
+/*Now check if have ant ext or ent that insert to command cuz the line doesn't start wit dot - and fix it*/
     i=0;
     while (i<=line)
     {
@@ -302,8 +302,10 @@ int buildMatrix (FILE *file)
         free(&mat[allLines].inputLine);
         allLines--;
     }
+
     return flag;
 }
+
 /*Prints a line of the matrix*/
 void printLine(int i)
 {
@@ -343,7 +345,7 @@ char* getData(int index, int param)
         return mat[index].operand2;
 
     else
-        return "Error parameter was not found";
+        return "Error parameter was not found\n";
 }
 
 int getInputLine (int i)
@@ -377,19 +379,28 @@ void setData (int index, int param,char data [])
         printf ("Error, parameter or index out of bound\n");
 }
 
-/*Free all memory of mat*/
+int lineCounter (FILE *file)
+{
+    int counter = 0;
+    char c;
+    /*Going back to begining of the file*/
+    fseek(file,SEEK_SET,0);
+    /*Check if have 1 line at least */
+    if (fgetc(file)!= EOF)
+        counter++;
+
+    while ((c = fgetc(file))!= EOF)
+    {
+        if (c == '\n')
+            counter++;
+    }
+/*return number lines */
+    return counter;
+}
+
+
+/*Free memory of mat*/
 void freeMatrixMem ()
 {
     free(mat);
-    /*int i=0;
-    while(i<=line)
-    {
-        free(mat[i].label);
-        free(mat[i].command);
-        free(mat[i].operand1);
-        free(mat[i].operand2);
-        free(mat[i].inputLine);
-        i++;
-    }*/
-
 }

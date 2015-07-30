@@ -34,7 +34,7 @@ int checkCommand (char com[], int i)
             !strcmp("prn1", com) || !strcmp("prn2", com) ||
             !strcmp("jsr1", com) || !strcmp("jsr2", com) )
     {
-        if (strlen(getData(i, OPERAND1)) != 0 && strlen(getData(i, OPERAND2)) == 0)
+        if (strlen(getData(i, OPERAND1)) == 0 && strlen(getData(i, OPERAND2)) != 0)
             return TRUE;
 
         else
@@ -47,7 +47,7 @@ int checkCommand (char com[], int i)
     /*Special case not*/
     if (!strcmp("not1", com) || !strcmp("not2", com))
     {
-        if (strlen(getData(i, OPERAND1)) != 0 && strlen(getData(i, OPERAND2)) == 0)
+        if (strlen(getData(i, OPERAND1)) == 0 && strlen(getData(i, OPERAND2)) != 0)
             if (isRegister(getData(i, OPERAND1)))
                 return TRUE;
             else
@@ -131,6 +131,7 @@ int checkLabels ()
     }
     return flag;
 }
+
 /*
 int checkOperands ()
 {
@@ -144,6 +145,8 @@ int checkOperands ()
         else error
     return
 }*/
+
+/*Draft delete on Saturday*/
 int checkOperand1 (char oper[], int i)
 {
     extern int line;
@@ -154,20 +157,23 @@ int checkOperand1 (char oper[], int i)
     int length = strlen(oper);
     int counter =0;
     char* s = " ";
-
+    if(!changeDollars())
+        return FALSE;
     /*NUMBER*/
     if (oper[0] == '#')
     {
         if (length<2)
         {
-            printf("Wrong operand %s in line %i\n", oper, i);
+            printf("Wrong operand %s in line %i\n", oper, getInputLine(i));
         }
         else if (length==2)
         {
             if (isdigit(oper[1]))
                 flag = TRUE;
+            else if ((oper[1]=='-'||oper[1]=='+') && isdigit(oper[1])!=0)
+                flag = TRUE;
             else
-                printf("Wrong operand %s in line %i, # must be followed by a number \n", oper, i);
+                printf("Wrong operand %s in line %i, # must be followed by a number \n", oper, getInputLine(i));
         }
         if (length>2)
         {
@@ -181,16 +187,6 @@ int checkOperand1 (char oper[], int i)
     }/*end number*/
     else if (isRegister(oper))
         flag = TRUE;
-    else if (strcmp(oper, "$$"))
-    {
-        if (i==1)
-            printf("Illegal operand %s in line %i, cannot be used in the first line of the program", oper, getInputLine(i));
-        else if (checkOperand1(getData(i-1,OPERAND1), i-1))
-        {
-            setData(i, OPERAND1,getData(i-1, OPERAND1));
-            flag = TRUE;
-        }
-    }
     else
     {
         FILE *fp = fopen("input.ext","r");
@@ -204,10 +200,10 @@ int checkOperand1 (char oper[], int i)
             }
         }
         fclose(fp);
-      if(isLabel(oper,OPERAND1)==2)
+        if(isLabel(oper,OPERAND1)==2)
             flag = TRUE;
-      else
-        printf("Operand %s in line %i is not declared",oper,getInputLine(i));
+        else
+            printf("Operand %s in line %i is not declared",oper,getInputLine(i));
     }
     return flag;
 }
@@ -221,7 +217,7 @@ int checkOperand2 (char oper[], int i)
         flag = TRUE;
 
     else
-        printf("Illegal operand %s in line %i", oper, i);
+        printf("Illegal operand %s in line %i", oper, getInputLine(i));
 
     return flag;
 }
@@ -229,6 +225,7 @@ int checkOperand2 (char oper[], int i)
 int isLabel(char operand[], int param)
 {
     extern int line;
+    char c [MAX_INPUT];
     int i = 1;
     int flag = FALSE;
     while (i<line)
@@ -236,20 +233,30 @@ int isLabel(char operand[], int param)
         /*Check in the label column*/
         if (strcmp(getData(i, param), operand) == 0)
         {
+            i=line;
             flag = TRUE;
             if (strcmp(getData(i,COMMAND),".string")==0)
-                return flag+1;
+                return 2;
             else if(strcmp(getData(i,COMMAND),".data")==0)
-                return flag+1;
-            else
-                return flag;
+                return 2;
         }
         i++;
     }
+    FILE *fp = fopen("output.ext","r");
+    for((fscanf(fp,c));c!=EOF;(fscanf(fp,c)))
+    {
+        if(!strcmp(operand,c))
+        {
+            fclose(fp);
+            return 2;
+        }
 
+    }
+    fclose(fp);
     return flag;
 }
 
+/*check if is a register*/
 int isRegister(char oper[])
 {
     if (!strcmp(oper, "r0") || !strcmp(oper, "r1") ||
@@ -258,4 +265,45 @@ int isRegister(char oper[])
             !strcmp(oper, "r6") || !strcmp(oper, "r7") )
         return TRUE;
     return FALSE;
+}
+
+/*To finish the table we have to change the double dollar operator to the prev operand and check for valid*/
+int changeDollars()
+{
+    extern int line;
+    char temp [MAX_INPUT];
+    int i=1;
+    strcpy(temp,getData(i,OPERAND1));
+    if (!strcmp(temp,"$$"))
+    {
+        printf("Illegal operand %s in line %i, cannot be used in the first line of the program\n", temp, getInputLine(i));
+        return FALSE;
+    }
+    for (i=2; i<=line; i++)
+    {
+        strcpy(temp,getData(i,OPERAND1));
+        if (!strcmp(temp,"$$"))
+        {
+            if(strlen(getData(i-1,OPERAND1))<=1)
+            {
+                printf("Illegal operand %s in line %i, previous operand missing\n", temp, getInputLine(i));
+                return FALSE;
+            }
+            strcpy(temp,getData(i-1,OPERAND1));
+            setData(i,OPERAND1,temp);
+        }
+    }
+    return TRUE;
+}
+
+
+int strlenWithoutSpace(char c[])
+{
+    int i,count;
+    int len=strlen(c);
+    for (count=0,i=0;i<len;i++)
+        if(!isspace(c[i]))
+            count++;
+    return count;
+
 }

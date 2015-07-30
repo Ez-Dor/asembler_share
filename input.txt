@@ -13,6 +13,6 @@ LOOP: 	jmp1 L3
  		bne1 L3
 END: 	stop1
 STR: 	.string "abcdef"
-LENGTH: .data 6,-9,15
+LENGTH: .data 6,-9,1129,3435,46534,233,8,90
 K: 		.data 2 
             
