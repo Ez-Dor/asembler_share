@@ -7,6 +7,15 @@
 #define TRUE 1
 #define FALSE 0
 
+/*Direct Addressing Min and Max values*/
+#define DIRECTMIN -512
+#define DIRECTMAX 511
+
+/*.Data lines min and max values*/
+#define MINDATANUM -2048
+#define MAXDATANUM 2047
+
+
 /*typedef struct
 {
     *char mov1 = "mov1";
@@ -54,8 +63,11 @@ int checkAllCommands ();
 int checkLabels ();
 int getInputLine(int i);
 int isLabel(char operand[], int param);
+int isNumeric(char operand[], int i);
 int checkOperand1 (char com[], int i);
 int isRegister(char oper[]);
+int isData(int i);
+int isString(int i);
 void setData (int index, int param,char data []);
 void moveCulForOneOper();
 int changeDollars();

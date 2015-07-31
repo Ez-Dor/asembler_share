@@ -86,3 +86,24 @@
 	<string.h>
 	"asembler.h"
 
+1438333154 source:c:\users\liorf\desktop\asembler_share\inputdb.c
+	<stdlib.h>
+	<ctype.h>
+	<stdio.h>
+	<string.h>
+	"asembler.h"
+
+1438385837 c:\users\liorf\desktop\asembler_share\asembler.h
+
+1438352159 source:c:\users\liorf\desktop\asembler_share\main.c
+	<stdio.h>
+	<stdlib.h>
+	"asembler.h"
+
+1438385675 source:c:\users\liorf\desktop\asembler_share\firslavelcheckmethod.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"asembler.h"
+

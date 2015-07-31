@@ -23,7 +23,7 @@ int main(){
 
   printf("\n%i",checkLabels());
   printf("\n%i",flag);
-  printf("\n%i",checkAllCommands());
+  printf("\n%i", isNumeric(getData(1, OPERAND1), 1));
 
 
   freeMatrixMem();
