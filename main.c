@@ -3,30 +3,36 @@
 #include <stdlib.h>
 #include "asembler.h"
 
-int main(){
-    int flag;
-    char* c = "           ";
-    FILE *file = fopen ("input.txt", "r");
-      if (file == NULL)
+char* fileName;
+int main(int argc, char* argv[])
+{
+    char inputFile[FILENAME_MAX];
+    int flag = TRUE;
+    int i;
+    if(argc==1)
     {
-        printf("File does not exist");
+        printf("No files to compile");
         return 0;
     }
-    flag = buildMatrix(file);
-    if(!flag)
+    for(i=1; i<argc; i++)
     {
-        printf("error!!!!!");
-        exit(0);
+        fileName = argv[i];
+        strcpy(inputFile,argv[i]);
+        strcat(inputFile,".as");
+        FILE *file = fopen (inputFile, "r");
+        if (file == NULL)
+        {
+            printf("File %s does not exist",fileName);
+            return 0;
+        }
+
+        if(!buildMatrix(file)||!changeDollars()||!checkLabels()||!checkAllCommands())
+            flag = FALSE;
+        printMatrix();
+        printf("%i\n",flag);
+        freeMatrixMem();
+        fclose(file);
+
     }
-    changeDollars();
-    printMatrix();
-
-  printf("\n%i",checkLabels());
-  printf("\n%i",flag);
-  printf("\n%i", checkAllCommands());
-
-
-  freeMatrixMem();
-    fclose(file);
     return 0;
 }

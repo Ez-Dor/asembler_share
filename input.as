@@ -4,15 +4,17 @@
 .extern W
 MAIN: 	mov2 K, W
  		add1 r2,STR
- 		mov1 $$,r4
+		mov1 $$,r4
+ 		    ;fjhvsdjlkhlkjshfdlkgjskl
 LOOP: 	jmp1 L3
 		prn1 #-5
+		;wtf???:
  		sub1 $$, r1
  		inc1 r0
  		mov2 $$,r3
  		bne1 L3
 END: 	stop1
 STR: 	.string "abcdef"
-LENGTH: .data 6,-9,1129,3435,46534,233,8,90
+LENGTH: .data 6,-9,15
 K: 		.data 2 
-            
+       

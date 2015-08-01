@@ -29,6 +29,9 @@ int buildMatrix (FILE *file)
 {
 
     /*Variables*/
+    extern char* fileName;
+    char fileExt[FILENAME_MAX];
+    char fileEnt[FILENAME_MAX];
     char s;
     int counter=1;
     int state = LABEL;
@@ -39,9 +42,13 @@ int buildMatrix (FILE *file)
     int y=0;
     int flag = TRUE;
     char temp [] = "abcdef";
+    strcpy(fileEnt,fileName);
+    strcpy(fileExt,fileName);
+    strcat(fileEnt,".ent");
+    strcat(fileExt,".ext");
     /*Overwrite old files*/
-    FILE *ent = fopen("output.ent","w");
-    FILE *ext = fopen("output.ext","w");
+    FILE *ent = fopen(fileEnt,"w");
+    FILE *ext = fopen(fileExt,"w");
     fclose(ent);
     fclose(ext);
     /*Use Line Counter to know how many lines are in the input file*/
@@ -65,17 +72,18 @@ int buildMatrix (FILE *file)
         state = LABEL;
         /*If have a comment skip line*/
         if (s==';')
+        {
+            while (s!='\n')
             {
-                while (s!='\n')
-                {
-
-                    s=fgetc(file);
-                }
-                y++;
+                s=fgetc(file);
             }
+            y++;
+            line--;
+        }
         /*Checks if there is any data that needs to go to external files and outputs it*/
         else if (s == '.')
-        {   y++;
+        {
+            y++;
             line--;
             x=0;
             /*Run until the end of the word and check validality */
@@ -88,7 +96,7 @@ int buildMatrix (FILE *file)
             /*Checks if entry*/
             if (strcmp("entry ", temp)==0)
             {
-                FILE *ent = fopen("output.ent","a");
+                FILE *ent = fopen(fileEnt,"a");
                 while (s!='\n' && s!=EOF)
                 {
                     s=getc(file);
@@ -100,7 +108,7 @@ int buildMatrix (FILE *file)
             /*Checks if external*/
             else if (strcmp("extern", temp)==0)
             {
-                FILE *ext = fopen("output.ext","a");
+                FILE *ext = fopen(fileExt,"a");
                 while (s!='\n' && s!=EOF)
                 {
                     s=getc(file);
@@ -123,19 +131,24 @@ int buildMatrix (FILE *file)
         else
         {
             /*If the line is not a label, we skip spaces*/
-            if (s==' '||s=='\t')
+            if (isspace(s))
             {
-                while ((s==' ' && s!='\n' && s != EOF) || (s=='\t'&& s!='\n' && s != EOF))
+                while (isspace(s))
+                {
+                    s=fgetc(file);
+                }
+                if(s==';')
                 {
 
-                    s=fgetc(file);
+                    while(s!='\n')
+                        s=fgetc(file);
                 }
                 if (s=='\n' || s == EOF)
                 {
                     line--;
                     y++;
+                    i--;
                 }
-
                 else
                     state = COMMAND;
             }
@@ -254,42 +267,42 @@ int buildMatrix (FILE *file)
         j=0;
         s = fgetc(file);
     }
-/*Now check if have ant ext or ent that insert to command cuz the line doesn't start wit dot - and fix it*/
+    /*Now check if have ant ext or ent that insert to command cuz the line doesn't start wit dot - and fix it*/
     i=0;
     while (i<=line)
     {
         x=0;
         strcpy(temp,mat[i].command);
         if (strcmp(".entry", temp)==0)
-            {
-                FILE *ent = fopen("output.ent","a");
-                fputs(mat[i].operand1,ent);
-                fclose(ent);
-                x=1;
-            }
+        {
+            FILE *ent = fopen(fileEnt,"a");
+            fputs(mat[i].operand1,ent);
+            fclose(ent);
+            x=1;
+        }
         else if (strcmp(".extern", temp)==0)
-            {
-                FILE *ext = fopen("output.ext","a");
-                fputs(mat[i].operand1,ext);
-                fclose(ext);
-                x=1;
-            }
+        {
+            FILE *ext = fopen(fileEnt,"a");
+            fputs(mat[i].operand1,ext);
+            fclose(ext);
+            x=1;
+        }
         if(x!=0)
-       {
-           j=i;
-           while (j<line)
-           {
-               strcpy(mat[j].label,mat[j+1].label);
-               strcpy(mat[j].command,mat[j+1].command);
-               strcpy(mat[j].operand1,mat[j+1].operand1);
-               strcpy(mat[j].operand2,mat[j+1].operand2);
-               mat[j].inputLine = mat[j+1].inputLine;
-               j++;
-           }
-           line--;
-           y++;
-       }
-       i++;
+        {
+            j=i;
+            while (j<line)
+            {
+                strcpy(mat[j].label,mat[j+1].label);
+                strcpy(mat[j].command,mat[j+1].command);
+                strcpy(mat[j].operand1,mat[j+1].operand1);
+                strcpy(mat[j].operand2,mat[j+1].operand2);
+                mat[j].inputLine = mat[j+1].inputLine;
+                j++;
+            }
+            line--;
+            y++;
+        }
+        i++;
     }
     /*Free all the empty lines on our matrix*/
     allLines = line+y;
@@ -331,7 +344,7 @@ void printMatrix()
 char* getData(int index, int param)
 {
     if(index>line || index<1)
-     return "Index out of bounds";
+        return "Index out of bounds";
     if (param == LABEL)
         return mat[index].label;
 
@@ -362,17 +375,17 @@ void setData (int index, int param,char data [])
 {
     if(index<=line || index>=1)
     {
-      if (param == LABEL)
-        strcpy(mat[index].label,data);
+        if (param == LABEL)
+            strcpy(mat[index].label,data);
 
-    else if (param == COMMAND)
-        strcpy(mat[index].command,data);
+        else if (param == COMMAND)
+            strcpy(mat[index].command,data);
 
-    else if (param == OPERAND1)
-        strcpy (mat[index].operand1,data);
+        else if (param == OPERAND1)
+            strcpy (mat[index].operand1,data);
 
-    else if (param == OPERAND2)
-        strcpy(mat[index].operand2,data);
+        else if (param == OPERAND2)
+            strcpy(mat[index].operand2,data);
     }
 
     else
@@ -394,7 +407,7 @@ int lineCounter (FILE *file)
         if (c == '\n')
             counter++;
     }
-/*return number lines */
+    /*return number lines */
     return counter;
 }
 
