@@ -18,22 +18,22 @@ int checkCommand (char com[], int i)
             !strcmp("add1", com) || !strcmp("add2", com) ||
             !strcmp("sub1", com) || !strcmp("sub2", com) )
     {
-         /*Do we have two operands?*/
+        /*Do we have two operands?*/
         if (strlen(getData(i, OPERAND1)) != 0 && strlen(getData(i, OPERAND2)) != 0)
         {
             /*Is Operand1 legal?*/
-            if(isRegister(getData(i, OPERAND1)) || isLabel(getData(i, OPERAND1), 3) || isNumeric(getData(i, OPERAND1), i))
+            if(isRegister(getData(i, OPERAND1)) || isLabel(getData(i, OPERAND1), OPERAND1) || isNumeric(getData(i, OPERAND1), i))
             {
                 /*Is Operand2 legal?*/
-                if (isRegister(getData(i, OPERAND2)) || isLabel(getData(i, OPERAND2), 4))
-                    {
-                        flag = TRUE;
-                    }
+                if (isRegister(getData(i, OPERAND2)) || isLabel(getData(i, OPERAND2), OPERAND2))
+                {
+                    flag = TRUE;
+                }
                 else
-                    {
-                        printf("Ilegal operand %s in line %i\n", getData(i, OPERAND2), getInputLine(i));
-                        flag = FALSE;
-                    }
+                {
+                    printf("Ilegal operand %s in line %i\n", getData(i, OPERAND2), getInputLine(i));
+                    flag = FALSE;
+                }
 
             }
             else
@@ -55,24 +55,24 @@ int checkCommand (char com[], int i)
       Must have two operands
       Operands 1 and 2 must be either Label, Register or legal numeric value
     */
-     if (  !strcmp("cmp1", com) || !strcmp("cmp2", com))
+    if (  !strcmp("cmp1", com) || !strcmp("cmp2", com))
     {
-         /*Do we have two operands?*/
+        /*Do we have two operands?*/
         if (strlen(getData(i, OPERAND1)) != 0 && strlen(getData(i, OPERAND2)) != 0)
         {
             /*Is Operand1 legal?*/
-            if(isRegister(getData(i, OPERAND1)) || isLabel(getData(i, OPERAND1), 3) || isNumeric(getData(i, OPERAND1), i))
+            if(isRegister(getData(i, OPERAND1)) || isLabel(getData(i, OPERAND1), OPERAND1) || isNumeric(getData(i, OPERAND1), i))
             {
                 /*Is Operand2 legal?*/
-                if (isRegister(getData(i, OPERAND1)) || isLabel(getData(i, OPERAND1), 3) || isNumeric(getData(i, OPERAND1), i))
-                    {
-                        flag = TRUE;
-                    }
+                if (isRegister(getData(i, OPERAND1)) || isLabel(getData(i, OPERAND1), OPERAND1) || isNumeric(getData(i, OPERAND1), i))
+                {
+                    flag = TRUE;
+                }
                 else
-                    {
-                        printf("Ilegal operand %s in line %i\n", getData(i, OPERAND2), getInputLine(i));
-                        flag = FALSE;
-                    }
+                {
+                    printf("Ilegal operand %s in line %i\n", getData(i, OPERAND2), getInputLine(i));
+                    flag = FALSE;
+                }
 
             }
             else
@@ -94,24 +94,24 @@ int checkCommand (char com[], int i)
       Operand 1 must be a label
       Operand 2 must be either register or label
     */
-     if (  !strcmp("lea1", com) || !strcmp("lea2", com))
+    if (  !strcmp("lea1", com) || !strcmp("lea2", com))
     {
-         /*Do we have two operands?*/
+        /*Do we have two operands?*/
         if (strlen(getData(i, OPERAND1)) != 0 && strlen(getData(i, OPERAND2)) != 0)
         {
             /*Is Operand1 legal?*/
-            if(isLabel(getData(i, OPERAND1), 3))
+            if(isLabel(getData(i, OPERAND1), OPERAND1))
             {
                 /*Is Operand2 legal?*/
-                if (isRegister(getData(i, OPERAND1)) || isLabel(getData(i, OPERAND1), 3))
-                    {
-                        flag = TRUE;
-                    }
+                if (isRegister(getData(i, OPERAND1)) || isLabel(getData(i, OPERAND1), OPERAND1))
+                {
+                    flag = TRUE;
+                }
                 else
-                    {
-                        printf("Ilegal operand %s in line %i\n", getData(i, OPERAND2), getInputLine(i));
-                        flag = FALSE;
-                    }
+                {
+                    printf("Ilegal operand %s in line %i\n", getData(i, OPERAND2), getInputLine(i));
+                    flag = FALSE;
+                }
 
             }
             else
@@ -131,9 +131,9 @@ int checkCommand (char com[], int i)
       Must have one operand
       Operands 1 must be  register
     */
-     if (  !strcmp("not1", com) || !strcmp("not2", com))
+    if (  !strcmp("not1", com) || !strcmp("not2", com))
     {
-         /*Do we have one operands?*/
+        /*Do we have one operands?*/
         if (strlen(getData(i, OPERAND1)) != 0 && strlen(getData(i, OPERAND2)) == 0)
         {
             /*Is Operand1 legal?*/
@@ -165,13 +165,13 @@ int checkCommand (char com[], int i)
             !strcmp("bne1", com) || !strcmp("bne2", com) ||
             !strcmp("red1", com) || !strcmp("red2", com) )
     {
-         /*Do we have one operands?*/
+        /*Do we have one operands?*/
         if (strlen(getData(i, OPERAND1)) != 0 && strlen(getData(i, OPERAND2)) == 0)
         {
             /*Is Operand1 legal?*/
-            if(isRegister(getData(i, OPERAND1)) || isLabel(getData(i, OPERAND1), 3))
+            if(isRegister(getData(i, OPERAND1)) || isLabel(getData(i, OPERAND1), OPERAND1))
             {
-                        flag = TRUE;
+                flag = TRUE;
             }
             else
             {
@@ -191,13 +191,13 @@ int checkCommand (char com[], int i)
       Must have one operand
       Operands 1 must be either register, label or numeric
     */
-     if (  !strcmp("prn1", com) || !strcmp("prn2", com))
+    if (  !strcmp("prn1", com) || !strcmp("prn2", com))
     {
-         /*Do we have one operands?*/
+        /*Do we have one operands?*/
         if (strlen(getData(i, OPERAND1)) != 0 && strlen(getData(i, OPERAND2)) == 0)
         {
             /*Is Operand1 legal?*/
-            if(isRegister(getData(i, OPERAND1)) || isLabel(getData(i, OPERAND1), 3) || isNumeric(getData(i, OPERAND1), i))
+            if(isRegister(getData(i, OPERAND1)) || isLabel(getData(i, OPERAND1), OPERAND1) || isNumeric(getData(i, OPERAND1), i))
             {
                 flag = TRUE;
             }
@@ -219,13 +219,13 @@ int checkCommand (char com[], int i)
       Must have one operand
       Operands 1 must be label
     */
-     if (  !strcmp("jsr1", com) || !strcmp("jsr2", com))
+    if (  !strcmp("jsr1", com) || !strcmp("jsr2", com))
     {
-         /*Do we have one operands?*/
+        /*Do we have one operands?*/
         if (strlen(getData(i, OPERAND1)) != 0 && strlen(getData(i, OPERAND2)) == 0)
         {
             /*Is Operand1 legal?*/
-            if(isLabel(getData(i, OPERAND1), 3))
+            if(isLabel(getData(i, OPERAND1), OPERAND1))
             {
                 flag = TRUE;
             }
@@ -258,7 +258,7 @@ int checkCommand (char com[], int i)
         }
     }
 
-  /*.data tests*/
+    /*.data tests*/
     if (!strcmp(".data", com))
     {
         if(isData(i))
@@ -428,18 +428,16 @@ int isLabel(char operand[], int param)
     extern int line;
     char c [MAX_INPUT];
     int i = 1;
-    int flag = FALSE;
     while (i<line)
     {
         /*Check in the label column*/
         if (strcmp(getData(i, param), operand) == 0)
         {
             i=line;
-            flag = TRUE;
             if (strcmp(getData(i,COMMAND),".string")==0)
-                return 2;
+                return TRUE;
             else if(strcmp(getData(i,COMMAND),".data")==0)
-                return 2;
+                return TRUE;
         }
         i++;
     }
@@ -449,12 +447,12 @@ int isLabel(char operand[], int param)
         if(!strcmp(operand,c))
         {
             fclose(fp);
-            return 2;
+            return TRUE;
         }
 
     }
     fclose(fp);
-    return flag;
+    return FALSE;
 }
 
 /*check if is a register*/
@@ -517,9 +515,9 @@ int isNumeric(char oper[], int i)
 /*Check if .Data has legal values*/
 int isData(int i)
 {
-    #define COMMA 0
-    #define NUMBER 1
-    char str [64];
+#define COMMA 0
+#define NUMBER 1
+    char str [31];
     int state = COMMA;
     int len;
     int bigflag =TRUE;
@@ -528,46 +526,72 @@ int isData(int i)
     int num;
 
     strcpy(str, getData(i, OPERAND1));
-    strcat(str, getData(i, OPERAND2));
     len = strlen(str);
-
-    while(j<len)
+    if(len>0)
     {
-        flag = FALSE;
-        if(state==COMMA && flag==FALSE)
+        while(j<len)
         {
-            if(isdigit(str[j]) || str[j]=='+' || str[j] == '-')
-            {
-                state=NUMBER;
-                flag = TRUE;
-                num = strtol(str+j, NULL, 10);
-                printf("FOUND NUMBER: %d\n", num);
-                if (num<MINDATANUM || num>MAXDATANUM)
+                if(isdigit(str[j]) || str[j]=='+' || str[j] == '-')
                 {
-                    printf("Number out of bound in line %i\n", getInputLine(i));
+                    num = strtol(str+j, NULL, 10);
+                    if (num<MINDATANUM || num>MAXDATANUM)
+                    {
+                        printf("Number out of bound in line %i col %i\n", getInputLine(i), j);
+                        bigflag = FALSE;
+                    }
+
+                }
+                else
+                {
+                    bigflag = FALSE;
+                    printf("ilegal value %c in line %i col %i\n", str[j], getInputLine(i), j);
+                }
+        j++;
+        }
+    }
+
+    j=0;
+    state=COMMA;
+    strcpy(str, getData(i, OPERAND2));
+    len = strlen(str);
+    if(len>0)
+    {
+        while(j<len)
+        {
+            flag = FALSE;
+            if(state==COMMA && flag==FALSE)
+            {
+                if(isdigit(str[j]) || str[j]=='+' || str[j] == '-')
+                {
+                    state=NUMBER;
+                    flag = TRUE;
+                    num = strtol(str+j, NULL, 10);
+                    if (num<MINDATANUM || num>MAXDATANUM)
+                    {
+                        printf("Number out of bound in line %i col %i\n", getInputLine(i), j);
+                        bigflag = FALSE;
+                    }
+
+                }
+
+                if(str[j]!=' ' && state==COMMA && flag==FALSE)
+                {
+                    printf("ilegal value %c in line %i col %i\n", str[j], getInputLine(i), j);
                     bigflag = FALSE;
                 }
-
             }
 
-            if(str[j]!=' ' && state==COMMA && flag==FALSE)
-                {
-                printf("ilegal value %c in line %i\n", str[j], getInputLine(i));
-                bigflag = FALSE;
-                }
-        }
-
-        if(state==NUMBER && flag==FALSE)
+            if(state==NUMBER && flag==FALSE)
             {
                 if(!isdigit(str[j]))
                 {
                     if(str[j]==',')
                     {
                         state=COMMA;
-                        flag =1;
+                        flag =TRUE;
                     }
 
-                    if(str[j]!=' ' &&state==NUMBER && flag==0)
+                    if(str[j]!=' ' &&state==NUMBER && flag==FALSE)
                     {
                         printf("ilegal value %c in line %i\n", str[j], getInputLine(i));
                         bigflag = FALSE;
@@ -575,10 +599,9 @@ int isData(int i)
 
                 }
             }
-             printf("Value is ~%c~\n", str[j]);
-            i++;
+            j++;
+        }
     }
-
     return bigflag;
 }
 
@@ -618,58 +641,63 @@ int changeDollars()
         strcpy(temp,getData(i,OPERAND1));
         if (!strcmp(temp,"$$"))
         {
-            if(!strcmp(getData(i,COMMAND),"lea1")||!strcmp(getData(i,COMMAND),"lea2"))
+            if(!strlen(getData(i,OPERAND2)))
             {
-                printf("Illegal operand %s in line %i, cannot be used in the \"lea\" command\n", temp, getInputLine(i));
-                flag = FALSE;
+                if( !strcmp(getData(i,COMMAND),"jmp1")||!strcmp(getData(i,COMMAND),"jmp2")||
+                        !strcmp(getData(i,COMMAND),"bne1")||!strcmp(getData(i,COMMAND),"bne2")||
+                        !strcmp(getData(i,COMMAND),"red1")||!strcmp(getData(i,COMMAND),"red2")||
+                        !strcmp(getData(i,COMMAND),"prn1")||!strcmp(getData(i,COMMAND),"prn2"))
+                {
+                    if(strlen(getData(i-1,OPERAND2))<=1)
+                    {
+                        printf("Illegal operand %s in line %i, previous operand missing\n", temp, getInputLine(i));
+                        flag = FALSE;
+                    }
+                    else
+                    {
+                        strcpy(temp,getData(i-1,OPERAND2));
+                        setData(i,OPERAND2,temp);
+                    }
+
+                }
+                else
+                {
+                    printf("Illegal operand %s in line %i, cannot be used in the %s command\n", temp, getInputLine(i),getData(i,COMMAND));
+                    flag = FALSE;
+                }
             }
-            if(strlen(getData(i-1,OPERAND1))<=1)
+            else
             {
-                printf("Illegal operand %s in line %i, previous operand missing\n", temp, getInputLine(i));
-                flag = FALSE;
-            }
-            strcpy(temp,getData(i-1,OPERAND1));
-            setData(i,OPERAND1,temp);
-        }
-    }
-    /*Operand2 checks*/
-    strcpy(temp,getData(i,OPERAND2));
-    if (!strcmp(temp,"$$"))
-    {
-        printf("Illegal operand %s in line %i, cannot be used in the first line of the program\n", temp, getInputLine(i));
-        flag = FALSE;
-    }
-    for (i=2; i<=line; i++)
-    {
-        strcpy(temp,getData(i,OPERAND2));
-        if (!strcmp(temp,"$$"))
-        {
-            if(!strcmp(getData(i,COMMAND),"cmp1")||!strcmp(getData(i,COMMAND),"cmp2")||
-                    !strcmp(getData(i,COMMAND),"jmp1")||!strcmp(getData(i,COMMAND),"jmp2")||
-                    !strcmp(getData(i,COMMAND),"bne1")||!strcmp(getData(i,COMMAND),"bne2")||
-                    !strcmp(getData(i,COMMAND),"red1")||!strcmp(getData(i,COMMAND),"red2")||
-                    !strcmp(getData(i,COMMAND),"prn1")||!strcmp(getData(i,COMMAND),"prn2"))
-            {
-                if(strlen(getData(i-1,OPERAND2))<=1)
+
+                if(!strcmp(getData(i,COMMAND),"cmp1")||!strcmp(getData(i,COMMAND),"cmp2"))
+                {
+                    if(!strcmp(getData(i,OPERAND2),"$$"))
+                    {
+                        if(strlen(getData(i-1,OPERAND2))<=1)
+                        {
+                            printf("Illegal operand %s in line %i, previous operand missing\n", temp, getInputLine(i));
+                            flag = FALSE;
+                        }
+                        strcpy(temp,getData(i-1,OPERAND2));
+                        setData(i,OPERAND2,temp);
+                    }
+                }
+                else if(!strcmp(getData(i,COMMAND),"lea1")||!strcmp(getData(i,COMMAND),"lea2"))
+                {
+                    printf("Illegal operand %s in line %i, cannot be used in the \"lea\" command\n", temp, getInputLine(i));
+                    flag = FALSE;
+                }
+                if(strlen(getData(i-1,OPERAND1))<=1)
                 {
                     printf("Illegal operand %s in line %i, previous operand missing\n", temp, getInputLine(i));
                     flag = FALSE;
                 }
-                else
-                {
-                    strcpy(temp,getData(i-1,OPERAND2));
-                    setData(i,OPERAND2,temp);
-                }
-
+                strcpy(temp,getData(i-1,OPERAND1));
+                setData(i,OPERAND1,temp);
             }
-            else
-            {
-                printf("Illegal operand %s in line %i, cannot be used in the %s command\n", temp, getInputLine(i),getData(i,COMMAND));
-                flag = FALSE;
-            }
-
         }
     }
+
     return flag;
 }
 

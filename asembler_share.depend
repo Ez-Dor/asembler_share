@@ -25,12 +25,12 @@
 	<ctype.h>
 	<stdio.h>
 
-1438279995 source:c:\users\user\documents\school\20465\asembler_share\main.c
+1438419389 source:c:\users\user\documents\school\20465\asembler_share\main.c
 	<stdio.h>
 	<stdlib.h>
 	"asembler.h"
 
-1438276024 c:\users\user\documents\school\20465\asembler_share\asembler.h
+1438416862 c:\users\user\documents\school\20465\asembler_share\asembler.h
 
 1434988853 source:c:\users\user\documents\school\20465\asembler_share\metrixparam.c
 	<stdlib.h>
@@ -72,7 +72,7 @@
 	<string.h>
 	"asembler.h"
 
-1438279956 source:c:\users\user\documents\school\20465\asembler_share\firslavelcheckmethod.c
+1438420530 source:c:\users\user\documents\school\20465\asembler_share\firslavelcheckmethod.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
