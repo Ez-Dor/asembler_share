@@ -1,0 +1,156 @@
+/*all the command that should be with one operand its to be on the operand 2 cul*/
+/*void moveCulForOneOper()
+{
+    int i,j,count;
+    char temp1[MAX_INPUT];
+    int len;
+    for (i=1;i<=line;i++)
+    {
+
+      strcpy(temp1,getData(i,OPERAND2));
+      (len=strlen(temp1));
+      if (!len)
+      {
+            setData(i,OPERAND2,getData(i,OPERAND1));
+            setData(i,OPERAND1,temp1);
+      }
+      else
+      {
+          if(!strlenWithoutSpace(temp1))
+          {
+                setData(i,OPERAND2,getData(i,OPERAND1));
+                setData(i,OPERAND1,temp1);
+          }
+      }
+    }
+
+}
+*/
+
+
+/*typedef struct
+{
+    *char mov1 = "mov1";
+    *char mov2 = "mov2";
+    *char cmp1 = "cmp1";
+    *char cmp2 = "cmp2";
+    *char add1 = "add1";
+    *char add2 = "add2";
+    *char sub1 = "sub1";
+    *char sub2 = "sub2";
+    *char _not1 = "not1";
+    *char _not2 = "not2";
+    *char clr1 = "clr1";
+    *char clr2 = "clr2";
+    *char lea1 = "lea1";
+    *char lea2 = "lea2";
+    *char inc1 = "inc1";
+    *char inc2 = "inc2";
+    *char dec1 = "dec1";
+    *char dec2 = "dec2";
+    *char jmp1 = "jmp1";
+    *char jmp2 = "jmp2";
+    *char bne1 = "bne1";
+    *char bne2 = "bne2";
+    *char red1 = "red1";
+    *char red2 = "red2";
+    *char prn1 = "prn1";
+    *char prn2 = "prn2";
+    *char jsr1 = "jsr1";
+    *char jsr2 = "jsr2";
+    *char rts1 = "rts1";
+    *char rts2 = "rts2";
+    *char stop1 = "stop1";
+    *char stop2 = "stop2";
+}*/
+
+
+/*
+int checkOperands ()
+{
+    if (two operands)
+        checkOperand1
+        checkOperand2
+
+    if (one operand)
+        if not, must be register
+        else if is label/register
+        else error
+    return
+}*/
+
+/*Draft delete on Saturday*/
+int checkOperand1 (char oper[], int i)
+{
+    extern int line;
+    int temp[31];
+    int x=1;
+    int flag = FALSE;
+    int j;
+    int length = strlen(oper);
+    int counter =0;
+    char* s = " ";
+    if(!changeDollars())
+        return FALSE;
+    /*NUMBER*/
+    if (oper[0] == '#')
+    {
+        if (length<2)
+        {
+            printf("Wrong operand %s in line %i\n", oper, getInputLine(i));
+        }
+        else if (length==2)
+        {
+            if (isdigit(oper[1]))
+                flag = TRUE;
+            else if ((oper[1]=='-'||oper[1]=='+') && isdigit(oper[1])!=0)
+                flag = TRUE;
+            else
+                printf("Wrong operand %s in line %i, # must be followed by a number \n", oper, getInputLine(i));
+        }
+        if (length>2)
+        {
+            flag = TRUE;
+            for(j=2; j==length-1; i++)
+            {
+                if (!isdigit(oper[i]))
+                    flag = FALSE;
+            }
+        }
+    }/*end number*/
+    else if (isRegister(oper))
+        flag = TRUE;
+    else
+    {
+        FILE *fp = fopen("input.ext","r");
+        while (s)
+        {
+            fscanf(fp, s);
+            if (strcmp(s,oper))
+            {
+                flag =TRUE;
+                s = NULL;
+            }
+        }
+        fclose(fp);
+        if(isLabel(oper,OPERAND1)==2)
+            flag = TRUE;
+        else
+            printf("Operand %s in line %i is not declared",oper,getInputLine(i));
+    }
+    return flag;
+}
+
+int checkOperand2 (char oper[], int i)
+{
+    int flag = FALSE;
+    if (isLabel(oper, OPERAND2))
+        flag = TRUE;
+    else if (isRegister(oper))
+        flag = TRUE;
+
+    else
+        printf("Illegal operand %s in line %i", oper, getInputLine(i));
+
+    return flag;
+}
