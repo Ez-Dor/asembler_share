@@ -341,11 +341,7 @@ int checkLabels ()
 int isLabel(char operand[])
 {
     extern int line;
-    extern char* fileName;
-    char fileExt[FILENAME_MAX];
-    char c [MAX_INPUT];
     int i = 1;
-    FILE *fp;
     while (i<=line)
     {
 
@@ -363,6 +359,15 @@ int isLabel(char operand[])
 
         i++;
     }
+    return isExtern(operand);
+}
+
+int isExtern(char param[])
+{
+    FILE *fp;
+    char c [MAX_INPUT];
+    char fileExt[FILENAME_MAX];
+    extern char* fileName;
     strcpy(fileExt,fileName);
     strcat(fileExt,".ext");
     fp = fopen(fileExt,"r");
@@ -370,7 +375,30 @@ int isLabel(char operand[])
         return FALSE;
     while((fscanf(fp,"%s",c))==1)
     {
-        if(!strcmp(operand,c))
+        if(!strcmp(param,c))
+        {
+            fclose(fp);
+            return TRUE;
+        }
+
+    }
+    fclose(fp);
+    return FALSE;
+}
+int isEntry(char param[])
+{
+    FILE *fp;
+    char c [MAX_INPUT];
+    char fileEnt[FILENAME_MAX];
+    extern char* fileName;
+    strcpy(fileEnt,fileName);
+    strcat(fileEnt,".ent");
+    fp = fopen(fileEnt,"r");
+    if(!fp)
+        return FALSE;
+    while((fscanf(fp,"%s",c))==1)
+    {
+        if(!strcmp(param,c))
         {
             fclose(fp);
             return TRUE;

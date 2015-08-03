@@ -10,6 +10,7 @@
 #define OPERAND2 4
 #define MAX_INPUT 31
 #define MAX_BITS 12
+#define MAX_CODE_LINES 1000;
 
 /*Constants for Boolean*/
 #define TRUE 1
@@ -25,6 +26,9 @@
 
 #define COMMA 0
 #define NUMBER 1
+
+/*Returns arry length*/
+#define ARR_LEN(x)  (sizeof(x) / sizeof((x)[0]))
 
 /*Function prototype*/
 int lineCounter(FILE *file);
@@ -46,6 +50,10 @@ void setData (int index, int param,char data []);
 int changeDollars();
 int strlenWithoutSpace(char c[]);
 void buildSymbolTable();
+int isExtern(char param[]);
+int isEntry(char param[]);
+void freeSTable();
+int lineIC(int i);
 
 /*
 int checkOperand1 (char com[], int i);

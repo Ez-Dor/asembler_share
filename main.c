@@ -33,6 +33,8 @@ int main(int argc, char* argv[])
         printMatrix();
         printf("%i\n",flag);
         buildSymbolTable();
+        printf("%i",lineIC(1));
+        freeSTable();
         freeMatrixMem();
         fclose(file);
 

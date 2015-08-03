@@ -19,6 +19,8 @@ typedef struct
     char operand1 [MAX_INPUT];
     char operand2 [MAX_INPUT];
     int inputLine;
+    int *address;
+    char *code;
 } matrixLine;
 
 
@@ -42,13 +44,15 @@ int buildMatrix (FILE *file)
     int y=0;
     int flag = TRUE;
     char temp [] = "abcdef";
+    FILE *ent;
+    FILE *ext;
     strcpy(fileEnt,fileName);
     strcpy(fileExt,fileName);
     strcat(fileEnt,".ent");
     strcat(fileExt,".ext");
     /*Overwrite old files*/
-    FILE *ent = fopen(fileEnt,"w");
-    FILE *ext = fopen(fileExt,"w");
+    ent = fopen(fileEnt,"w");
+    ext = fopen(fileExt,"w");
     fclose(ent);
     fclose(ext);
     /*Use Line Counter to know how many lines are in the input file*/
@@ -313,6 +317,7 @@ int buildMatrix (FILE *file)
         free(mat[allLines].operand1);
         free(mat[allLines].operand2);
         free(&mat[allLines].inputLine);
+        free(&mat[allLines].address);
         allLines--;
     }
 
