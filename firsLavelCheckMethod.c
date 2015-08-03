@@ -365,7 +365,8 @@ int isLabel(char operand[])
     strcpy(fileExt,fileName);
     strcat(fileExt,".ext");
     FILE *fp = fopen(fileExt,"r");
-    fseek(fp,SEEK_SET,0);
+    if(!fp)
+        return FALSE;
     while((fscanf(fp,"%s",c))==1)
     {
         if(!strcmp(operand,c))

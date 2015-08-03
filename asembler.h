@@ -3,12 +3,30 @@
 #define ASEMBLER_H_
 #endif
 
+#ifndef STDIO_H_
+#define STDIO_H_
+#endif
+
+#ifndef STDLIB_H_
+#define STDLIB_H_
+#endif
+
+#ifndef CTYPE_H_
+#define CTYPE_H_
+#endif
+
+#ifndef STRING_H_
+#define STRING_H_
+#endif
+
+
 #define INPUTLINE 0
 #define LABEL 1
 #define COMMAND 2
 #define OPERAND1 3
 #define OPERAND2 4
 #define MAX_INPUT 31
+#define MAX_BITS 12
 
 /*Constants for Boolean*/
 #define TRUE 1
