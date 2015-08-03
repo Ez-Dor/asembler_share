@@ -7,7 +7,7 @@
 typedef struct
 {
     char symbol[MAX_INPUT];
-    int adress;
+    int address;
     char status[MAX_INPUT];
     char code [MAX_BITS];
 }symbolLine;
@@ -17,7 +17,7 @@ void buildSymbolTable()
     extern char* fileName;
     extern int line;
     char temp[MAX_INPUT];
-    int i;
+    int i,j;
     char fileExt[FILENAME_MAX];
     char fileEnt[FILENAME_MAX];
     int existExt =TRUE;
@@ -33,14 +33,29 @@ void buildSymbolTable()
     if(!fileEnt)
         existEnt = FALSE;
 
-    symboline *sTable = calloc(line, sizeof(symbolLine));
+    symbolLine *sTable = calloc(line, sizeof(symbolLine));
     if (!sTable)
     {
         printf("Memory allocation failed");
         exit(0);
     }
-     for(i=1;i<=line;i++)
+     for(i=1,j=1;i<=line;i++)
      {
-
+        strcpy(temp,getData(i,LABEL));
+        if(strlen(temp))
+        {
+            strcpy(sTable[j].symbol,temp);
+            j++;
+        }
      }
+
+     for(i--;i>j;i--)
+      {
+          free(sTable+i);
+      }
+
+      for(i=1;i<=j;i++)
+      {
+          printf("%s\n",sTable[i].symbol);
+      }
 }

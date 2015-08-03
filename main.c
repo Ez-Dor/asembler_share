@@ -1,6 +1,7 @@
 /*The main use for tests until EOP (like EOF but for our project;)*/
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "asembler.h"
 
 char* fileName;
@@ -9,6 +10,7 @@ int main(int argc, char* argv[])
     char inputFile[FILENAME_MAX];
     int flag = TRUE;
     int i;
+    FILE *file;
     if(argc==1)
     {
         printf("No files to compile");
@@ -19,7 +21,7 @@ int main(int argc, char* argv[])
         fileName = argv[i];
         strcpy(inputFile,argv[i]);
         strcat(inputFile,".as");
-        FILE *file = fopen (inputFile, "r");
+        file = fopen (inputFile, "r");
         if (file == NULL)
         {
             printf("File %s does not exist",fileName);
@@ -30,6 +32,7 @@ int main(int argc, char* argv[])
             flag = FALSE;
         printMatrix();
         printf("%i\n",flag);
+        buildSymbolTable();
         freeMatrixMem();
         fclose(file);
 

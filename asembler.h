@@ -3,23 +3,6 @@
 #define ASEMBLER_H_
 #endif
 
-#ifndef STDIO_H_
-#define STDIO_H_
-#endif
-
-#ifndef STDLIB_H_
-#define STDLIB_H_
-#endif
-
-#ifndef CTYPE_H_
-#define CTYPE_H_
-#endif
-
-#ifndef STRING_H_
-#define STRING_H_
-#endif
-
-
 #define INPUTLINE 0
 #define LABEL 1
 #define COMMAND 2
@@ -62,6 +45,7 @@ int isString(int i);
 void setData (int index, int param,char data []);
 int changeDollars();
 int strlenWithoutSpace(char c[]);
+void buildSymbolTable();
 
 /*
 int checkOperand1 (char com[], int i);

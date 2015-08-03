@@ -345,6 +345,7 @@ int isLabel(char operand[])
     char fileExt[FILENAME_MAX];
     char c [MAX_INPUT];
     int i = 1;
+    FILE *fp;
     while (i<=line)
     {
 
@@ -364,7 +365,7 @@ int isLabel(char operand[])
     }
     strcpy(fileExt,fileName);
     strcat(fileExt,".ext");
-    FILE *fp = fopen(fileExt,"r");
+    fp = fopen(fileExt,"r");
     if(!fp)
         return FALSE;
     while((fscanf(fp,"%s",c))==1)
