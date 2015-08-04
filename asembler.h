@@ -10,7 +10,8 @@
 #define OPERAND2 4
 #define MAX_INPUT 31
 #define MAX_BITS 12
-#define MAX_CODE_LINES 1000;
+#define FIRST_ADDRESS 100
+
 
 /*Constants for Boolean*/
 #define TRUE 1
@@ -54,6 +55,7 @@ int isExtern(char param[]);
 int isEntry(char param[]);
 void freeSTable();
 int lineIC(int i);
+void buildOutputTable();
 
 /*
 int checkOperand1 (char com[], int i);

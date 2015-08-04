@@ -315,6 +315,7 @@ int buildMatrix (FILE *file)
         free(mat[allLines].operand1);
         free(mat[allLines].operand2);
         free(&mat[allLines].inputLine);
+        free(&mat[allLines].address);
         allLines--;
     }
 

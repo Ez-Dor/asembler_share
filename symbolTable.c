@@ -5,15 +5,24 @@
 #include <math.h>
 #include "asembler.h"
 
+/*Struct for the symbol table every struct present a line*/
 typedef struct
 {
     char symbol[MAX_INPUT];
     int address;
     char status[MAX_INPUT];
-    char code [MAX_BITS];
 } symbolLine;
 
+/*Struct for the output table every struct present a line*/
+typedef struct
+{
+    int address;
+    char code [MAX_BITS];
+} outputLine;
+
 symbolLine *sTable;
+outputLine *oTable;
+int sTableLen,oTabelLen;
 
 void buildSymbolTable()
 {
@@ -29,11 +38,13 @@ void buildSymbolTable()
     }
     for(i=1,j=1; i<=line; i++)
     {
+
         strcpy(temp,getData(i,LABEL));
         if(strlen(temp))
         {
             strcpy(sTable[j].symbol,temp);
             sTable[j].address = addressCounter;
+            intToBase4(&sTable[i].address);
             if(!strcmp(getData(i,COMMAND),".data")||!strcmp(getData(i,COMMAND),".string"))
                 strcpy(sTable[j].status,"data");
 
@@ -44,22 +55,55 @@ void buildSymbolTable()
                 strcpy(sTable[j].status,"ext");
             j++;
         }
+
         addressCounter += codeLines(i);
-        printf("%i\n",intToBase4(addressCounter));
     }
 
     for(i--; i>=j; i--)
     {
         free(sTable+i);
     }
-
-
-    for(i=1; i<j; i++)
-    {
-        printf("%s\t%s\t%i\n",sTable[i].symbol,sTable[i].status,sTable[i].address);
-    }
+    sTableLen=j;
 }
 
+char *getSymbolStatus(char symbol[])
+{
+    int i;
+    for(i=0;i<sTableLen;i++)
+    {
+        if(!strcmp(symbol,sTable[i].symbol))
+            return sTable[i].status;
+    }
+    return NULL;
+}
+
+void buildOutputTable()
+{
+    extern int line;
+    int i,j;
+/*The length of the output*/
+    for(i=1,oTabelLen=0;i<=line;i++)
+    {
+        oTabelLen+=codeLines(i);
+    }
+/*Allocate memory for the output*/
+     oTable = calloc(oTabelLen, sizeof(outputLine));
+     if (!oTable)
+    {
+        printf("Memory allocation failed");
+        exit(0);
+    }
+/*Insert code address to the table*/
+    for(i=0;i<oTabelLen;i++)
+    {
+        oTable[i].address = i+FIRST_ADDRESS;
+        intToBase4(&oTable[i].address);
+    }
+        for(i=0;i<oTabelLen;i++)
+    {
+        printf("%i\n",oTable[i].address);
+    }
+}
 /*The method get line on input DB and return the "L" for IC*/
 int lineIC(int i)
 {
@@ -113,6 +157,7 @@ void createAdress()
 /*The method get line on input DB and return how many code lines have on the line*/
 int codeLines(int i)
 {
+    extern int line;
     int counter=1;
     int j=0;
     int len;
@@ -122,13 +167,19 @@ int codeLines(int i)
     strcpy(operand1,getData(i,OPERAND1));
     strcpy(operand2,getData(i,OPERAND2));
     strcpy(command,getData(i,COMMAND));
+    if(i<0 || i>line)
+        return 0;
     if(!strcmp(command,".data"))
     {
      len=strlen(operand2);
      for(j=0;j<len;j++)
      {
          if(isdigit(operand2[j]))
-            counter++;
+            {
+                counter++;
+                while(isdigit(operand2[j])&&j<len)
+                    j++;
+            }
      }
      return counter;
     }
@@ -166,21 +217,25 @@ int codeLines(int i)
 
 void intToBase4 (int *num)
 {
-    {
-      int d[5];
-      int j,i=0;
-      while(num>0)
+{
+      int d[7];
+      int i=0,j;
+      double x=0;
+      while((*num)>0)
       {
-           d[i] = (*num)%4;
+           d[i]=(*num)%4;
            i++;
-           num=(*num)/4;
+           (*num)=(*num)/4;
       }
-      for(j=i-1;j>=0;j--)
+      for(x=0,j=i-1;j>=0;j--)
       {
-            (*num) += (d[i])*(pow(10,j));
+        x += d[j]*pow(10,j);
       }
+      (*num)=(int)x;
  }
 }
+
+
 void freeSTable()
 {
     free(sTable);
