@@ -31,10 +31,9 @@ int main(int argc, char* argv[])
         if(!buildMatrix(file)||!changeDollars()||!checkLabels()||!checkAllCommands())
             flag = FALSE;
         printMatrix();
-        printf("%i\n",codeLines(12));
         buildSymbolTable();
         buildOutputTable();
-        freeSTable();
+        freeTables();
         freeMatrixMem();
         fclose(file);
 

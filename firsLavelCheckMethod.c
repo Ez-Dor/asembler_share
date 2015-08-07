@@ -661,6 +661,34 @@ int changeDollars()
 
     return flag;
 }
+void moveCulForOneOper()
+{
+    extern int line;
+    int i,j,count;
+    char temp1[MAX_INPUT];
+    int len;
+    for (i=1;i<=line;i++)
+    {
+
+      strcpy(temp1,getData(i,OPERAND2));
+      (len=strlen(temp1));
+      if (!len)
+      {
+            setData(i,OPERAND2,getData(i,OPERAND1));
+            setData(i,OPERAND1,temp1);
+      }
+      else
+      {
+          if(!strlenWithoutSpace(temp1))
+          {
+                setData(i,OPERAND2,getData(i,OPERAND1));
+                setData(i,OPERAND1,temp1);
+          }
+      }
+    }
+}
+
+
 
 
 int strlenWithoutSpace(char c[])

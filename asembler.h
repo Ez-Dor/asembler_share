@@ -9,8 +9,19 @@
 #define OPERAND1 3
 #define OPERAND2 4
 #define MAX_INPUT 31
-#define MAX_BITS 12
+#define MAX_BITS 13
 #define FIRST_ADDRESS 100
+
+#define GROUP1 2
+#define GROUP2 1
+#define GROUP3 0
+
+#define IS_NUMERIC 0
+#define IS_LABEL 1
+#define IS_REGISTER 3
+#define IS_EMPTY 4
+
+#define ONE_BIT 1
 
 
 /*Constants for Boolean*/
@@ -56,7 +67,9 @@ int isEntry(char param[]);
 void freeSTable();
 int lineIC(int i);
 void buildOutputTable();
+void moveCulForOneOper();
 
 /*
 int checkOperand1 (char com[], int i);
-void moveCulForOneOper();*/
+*/
+
