@@ -19,7 +19,7 @@
 #define IS_NUMERIC 0
 #define IS_LABEL 1
 #define IS_REGISTER 3
-#define IS_EMPTY 4
+#define IS_EMPTY 0
 
 #define ONE_BIT 1
 

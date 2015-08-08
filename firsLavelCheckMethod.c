@@ -323,8 +323,8 @@ int checkLabels ()
             {
                 if(strcmp(temp1,temp2)==0)
                 {
-                  flag = FALSE;
-                  printf("Found duplicate label in line %i and line %i\n",getInputLine(i), getInputLine(j));
+                    flag = FALSE;
+                    printf("Found duplicate label in line %i and line %i\n",getInputLine(i), getInputLine(j));
                 }
 
 
@@ -444,8 +444,8 @@ int isNumeric(char oper[], int i)
 
         else if (length>2)
         {
-           if (oper[1]=='-'|| oper[1]=='+' || isdigit(oper[1]))
-           {
+            if (oper[1]=='-'|| oper[1]=='+' || isdigit(oper[1]))
+            {
                 flag=TRUE;
                 for(j=2; j<length; j++)
                 {
@@ -456,11 +456,11 @@ int isNumeric(char oper[], int i)
                     }
 
                 }
-           }
-           else
-           {
+            }
+            else
+            {
                 printf("Wrong operand %s in line %i, # must be followed by a number \n", oper, getInputLine(i));
-           }
+            }
 
             /*Check that the numeric value is in range*/
             value = strtol(oper+1, NULL, 10);
@@ -661,30 +661,34 @@ int changeDollars()
 
     return flag;
 }
+
 void moveCulForOneOper()
 {
     extern int line;
     int i,j,count;
     char temp1[MAX_INPUT];
     int len;
-    for (i=1;i<=line;i++)
+    for (i=1; i<=line; i++)
     {
 
-      strcpy(temp1,getData(i,OPERAND2));
-      (len=strlen(temp1));
-      if (!len)
-      {
-            setData(i,OPERAND2,getData(i,OPERAND1));
-            setData(i,OPERAND1,temp1);
-      }
-      else
-      {
-          if(!strlenWithoutSpace(temp1))
-          {
+        strcpy(temp1,getData(i,OPERAND2));
+        if(strcmp(getData(i,COMMAND),".data"))
+        {
+            (len=strlen(temp1));
+            if (!len)
+            {
                 setData(i,OPERAND2,getData(i,OPERAND1));
                 setData(i,OPERAND1,temp1);
-          }
-      }
+            }
+            else
+            {
+                if(!strlen(temp1))
+                {
+                    setData(i,OPERAND2,getData(i,OPERAND1));
+                    setData(i,OPERAND1,temp1);
+                }
+            }
+        }
     }
 }
 
