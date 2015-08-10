@@ -51,16 +51,16 @@
 			<Add directory="C:/Users/USER/Dropbox/asembler_share/" />
 		</Linker>
 		<Unit filename="asembler.h" />
-		<Unit filename="firsLavelCheckMethod.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="inputDB.c">
+		<Unit filename="input_collector.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="symbolTable.c">
+		<Unit filename="parser.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="text_validation_func.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>

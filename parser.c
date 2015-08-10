@@ -10,7 +10,6 @@ typedef struct
 {
     char symbol[MAX_INPUT];
     int address;
-    char status[MAX_INPUT];
 } symbolLine;
 
 /*Struct for the output table every struct present a line*/
@@ -27,72 +26,82 @@ int sTableLen,oTabelLen;
 void buildSymbolTable()
 {
     extern int line;
+    extern char* fileName;
+    char entFile[FILENAME_MAX];
     char temp[MAX_INPUT];
-    int i,j;
+    int i;
+    unsigned int x;
     int addressCounter = 100;
+    FILE *fent;
     sTable= calloc(line, sizeof(symbolLine));
     if (!sTable)
     {
         printf("Memory allocation failed");
         exit(0);
     }
+    strcpy(entFile,fileName);
+    strcat(entFile,".en");
+    fent = fopen(entFile,"r");
+        if(fent)
+        {
+            fclose(fent);
+            strcat(entFile,"t");
+            fent = fopen(entFile,"w+");
+        }
     moveCulForOneOper();
-    for(i=1,j=1; i<=line; i++)
+    for(i=1,sTableLen=1; i<=line; i++)
     {
         strcpy(temp,getData(i,LABEL));
         if(strlen(temp))
         {
-            strcpy(sTable[j].symbol,temp);
-            sTable[j].address = addressCounter;
-            if(!strcmp(getData(i,COMMAND),".data")||!strcmp(getData(i,COMMAND),".string"))
-                strcpy(sTable[j].status,"data");
+            strcpy(sTable[sTableLen].symbol,temp);
+            sTable[sTableLen].address = addressCounter;
 
-            else if (isEntry(temp))
-                strcpy(sTable[j].status,"ent");
-
-            else if (isExtern(temp))
-                strcpy(sTable[j].status,"ext");
-            j++;
+            if (isEntry(temp))
+            {
+                    x=(unsigned int)addressCounter;
+                    intToBase4(&x);
+                    fprintf(fent,"%s\t%i\n",temp,x);
+            }
+            sTableLen++;
         }
 
         addressCounter += codeLines(i);
     }
 
-    for(i--; i>=j; i--)
+    for(i--; i>=sTableLen; i--)
     {
         free(sTable+i);
     }
-    /*j should be the symbole table length*/
-    sTableLen=j;
+
     /*address counter should be the length of the output*/
     oTabelLen = addressCounter-FIRST_ADDRESS;
-}
-
-int getSymbolAddress(char symbol[])
-{
-    int i;
-    for(i=0; i<sTableLen; i++)
-    {
-        if(!strcmp(symbol,sTable[i].symbol))
-            return sTable[i].address;
-    }
-    return 0;
+    fclose(fent);
 }
 
 void buildOutputTable()
 {
-
     extern int line;
     extern char* fileName;
-    int i=0,j=0,x=0,y=0,len=0,op1=0,op2=0,group=0, opcode=0,IC,DC,temp2=0;
-    char temp1 [MAX_BITS];
+    int i=0,j=0,x=0,y=0,len=0,op1=0,op2=0,group=0, opcode=0,IC,DC,temp=0;
     char operand1[MAX_INPUT];
     char operand2[MAX_INPUT];
     char command[MAX_INPUT];
     char oFile[FILENAME_MAX];
+    char extFile[FILENAME_MAX];
     FILE *fp;
+    FILE *fext;
     strcpy(oFile,fileName);
+    strcpy(extFile,fileName);
     strcat(oFile,".ob");
+    strcat(extFile,".ex");
+    fext = fopen(extFile,"r");
+        if(fext)
+        {
+            fclose(fext);
+            strcat(extFile,"t");
+            fext = fopen(extFile,"w+");
+        }
 
 
     /*Allocate memory for the output*/
@@ -198,142 +207,174 @@ void buildOutputTable()
             for(j=0; j<len; x++,j++)
             {
 
-                if(j==0)
+                if(j==FIRST_LINE)
                 {
-
-                    temp2=group;
-                    temp2<<=4;
-                    temp2+=opcode;
-                    temp2<<=2;
-                    temp2+=op1;
-                    temp2<<=2;
-                    temp2+=op2;
-                    temp2<<=2;
-                    oTable[x].code = temp2;
+                    temp=group;
+                    temp<<=FOUR_BITS;
+                    temp+=opcode;
+                    temp<<=TWO_BITS;
+                    temp+=op1;
+                    temp<<=TWO_BITS;
+                    temp+=op2;
+                    temp<<=TWO_BITS;
+                    oTable[x].code = temp;
                 }
 
-                else if(group == GROUP1 && j>0)
+                else if(group == GROUP1 && j>FIRST_LINE)
                 {
-                    printf("%s,%s\n",command,operand2);
                     if(op1==IS_REGISTER && op2==IS_REGISTER)
                     {
-                        temp2=atoi(&operand1[1]);
-                        temp2<<=5;
-                        temp2+=atoi(&operand2[1]);
-                        temp2<<=2;
-                        oTable[x].code = temp2;
+                        temp=atoi(&operand1[1]);
+                        temp<<=FIVE_BITS;
+                        temp+=atoi(&operand2[1]);
+                        temp<<=TWO_BITS;
+                        oTable[x].code = temp;
 
                     }
-                    else if(j==1)
+                    else if(j==SECOND_LINE)
                     {
                         if(op1==IS_REGISTER)
                         {
-                            temp2 = atoi(&operand1[1]);
-                            temp2 <<=7;
-                            oTable[x].code =temp2;
+                            temp = atoi(&operand1[1]);
+                            temp <<=(FIVE_BITS+TWO_BITS);
+                            oTable[x].code =temp;
                         }
                         else if(op1==IS_NUMERIC)
                         {
-                            temp2 = atoi(&operand1[1]);
-                            if(temp2<0)
-                                isNegative(&temp2);
+                            temp = atoi(&operand1[1]);
+                            if(temp<0)
+                                isNegative((unsigned int*)&temp);
 
-                            oTable[x].code =(unsigned int)temp2;
-                            oTable[x].code <<=2;
+                            oTable[x].code =(unsigned int)temp;
+                            oTable[x].code <<=TWO_BITS;
 
 
                         }
                         else if(op1==IS_LABEL)
                         {
                             oTable[x].code = getSymbolAddress(operand1);
-                            oTable[x].code <<=2;
+                            oTable[x].code <<=TWO_BITS;
                             oTable[x].code++;
                             if(!isExtern(operand1))
                                 oTable[x].code++;
+
+                            else
+                            {
+                                temp = oTable[x].address;
+                                intToBase4((unsigned int*)&temp);
+                                fprintf(fext,"%s\t%i\n",operand1,temp);
+                            }
                         }
                     }
-                    else if(j==2)
+                    else if(j==THIRD_LINE)
                     {
                         if(op2==IS_REGISTER)
                         {
 
                             oTable[x].code = atoi(&operand2[1]);
-                            oTable[x].code <<=2;
+                            oTable[x].code <<=TWO_BITS;
                         }
                         else if(op2==IS_NUMERIC)
                         {
 
-                            temp2 = atoi(&operand2[1]);
-                            if(temp2<0)
-                                isNegative(&temp2);
+                            temp = atoi(&operand2[1]);
+                            if(temp<0)
+                                isNegative((unsigned int*)&temp);
 
-                            oTable[x].code =(unsigned int)temp2;
-                            oTable[x].code <<=2;
+                            oTable[x].code =(unsigned int)temp;
+                            oTable[x].code <<=TWO_BITS;
                         }
                         else if(op2==IS_LABEL)
                         {
                             oTable[x].code = getSymbolAddress(operand2);
-                            oTable[x].code <<=2;
+                            oTable[x].code <<=TWO_BITS;
                             oTable[x].code++;
                             if(!isExtern(operand2))
                                 oTable[x].code++;
+
+                            else
+                            {
+                                temp = oTable[x].address;
+                                intToBase4((unsigned int*)&temp);
+                                fprintf(fext,"%s\t%i\n",operand2,temp);
+                            }
                         }
                     }
                 }
 
-                else if(group == GROUP2 && j>0)
+                else if(group == GROUP2 && j>FIRST_LINE)
                 {
                     if(op2==IS_REGISTER)
                     {
 
                         oTable[x].code = atoi(&operand2[1]);
-                        oTable[x].code <<=2;
+                        oTable[x].code <<=TWO_BITS;
                     }
                     if(op2==IS_NUMERIC)
                     {
-                        temp2 = atoi(&operand2[1]);
-                            if(temp2<0)
-                                isNegative(&temp2);
+                        temp = atoi(&operand2[1]);
+                        if(temp<0)
+                            isNegative((unsigned int*)&temp);
 
-                            oTable[x].code =(unsigned int)temp2;
-                            oTable[x].code <<=2;
+                        oTable[x].code =(unsigned int)temp;
+                        oTable[x].code <<=TWO_BITS;
                     }
 
                     if(op2==IS_LABEL)
                     {
+
                         oTable[x].code = getSymbolAddress(operand2);
-                        oTable[x].code <<=2;
+                        oTable[x].code <<=TWO_BITS;
                         oTable[x].code++;
                         if(!isExtern(operand2))
                             oTable[x].code++;
+                        else
+                            {
+                                temp = oTable[x].address;
+                                intToBase4((unsigned int*)&temp);
+                                fprintf(fext,"%s\t%i\n",operand2,temp);
+                            }
                     }
 
                 }
             }
-
             if(isDoubleCommend(command))
             {
                 for(j=0; j<len; x++,j++)
                 {
                     oTable[x].code=oTable[x-len].code;
                 }
+                if(op1==IS_LABEL && isExtern(operand1))
+                    {
+                        temp = oTable[x-2].address;
+                        intToBase4((unsigned int*)&temp);
+                        fprintf(fext,"%s\t%i\n",operand1,temp);
+                    }
+                if(op2==IS_LABEL && isExtern(operand2))
+                    {
+                        temp = oTable[x-1].address;
+                        intToBase4((unsigned int*)&temp);
+                        fprintf(fext,"%s\t%i\n",operand2,temp);
+                    }
             }
 
         }
     }
+
+/*Finish the output with the data and string*/
     IC = oTabelLen-x;
     DC = x;
-    intToBase4(&DC);
-    intToBase4(&IC);
-    for(i=1;i<=line;i++)
+    intToBase4((unsigned int*)&DC);
+    intToBase4((unsigned int*)&IC);
+    for(i=1; i<=line; i++)
     {
         strcpy(command,getData(i,COMMAND));
-         if(command[0]=='.')
-         {
+        if(command[0]=='.')
+        {
             strcpy(operand1,getData(i,OPERAND1));
             strcpy(operand2,getData(i,OPERAND2));
             len = codeLines(i);
-            for(y=0,j=0;j<len;j++,x++)
+            for(y=0,j=0; j<len; j++,x++)
             {
                 if(!strcmp(command,".string"))
                 {
@@ -346,21 +387,22 @@ void buildOutputTable()
                 {
                     if(j==0)
                     {
-                        temp2 = atoi(operand1);
-                        if(temp2<0)
-                            isNegativeOn12Bits(&temp2);
-                        oTable[x].code =(unsigned int) temp2;
+                        temp = atoi(operand1);
+                        if(temp<0)
+                            isNegativeOn12Bits((unsigned int*) &temp);
+                        oTable[x].code =(unsigned int) temp;
                     }
                     else
                     {
-                        temp2 = atoi(&operand2[y]);
-                        if(temp2<0)
-                            isNegativeOn12Bits(&temp2);
-                        oTable[x].code =(unsigned int) temp2;
+                        temp = atoi(&operand2[y]);
+                        if(temp<0)
+                            isNegativeOn12Bits((unsigned int*)&temp);
+                        oTable[x].code =(unsigned int) temp;
                         do
                         {
                             y++;
-                        }while(y<MAX_INPUT && operand2[y]!=',' && operand2[y]!='\0' );
+                        }
+                        while(y<MAX_INPUT && operand2[y]!=',' && operand2[y]!='\0' );
 
                         if(operand2[y]==',')
                             y++;
@@ -370,58 +412,35 @@ void buildOutputTable()
                 }
             }
 
-         }
+        }
     }
+
+/*Create the object file*/
     fp = fopen(oFile,"w+");
     fprintf(fp,"\t%i %i",DC,IC);
     fputc('\n',fp);
     for(i=0; i<oTabelLen; i++)
     {
-        intToBase4(&oTable[i].address);
+        intToBase4((unsigned int*)&oTable[i].address);
         intToBase4(&oTable[i].code);
         fprintf(fp,"%i\t%06u\n",oTable[i].address,oTable[i].code);
     }
     fclose(fp);
+    fclose(fext);
 
 }
 
 
-
-/*The method get line on input DB and return the "L" for IC*/
-/*int lineIC(int i)
+int getSymbolAddress(char symbol[])
 {
-    int counter=1;
-    int j=0;
-    char operand1[MAX_INPUT];
-    char operand2[MAX_INPUT];
-    char command[MAX_INPUT];
-    strcpy(operand1,getData(i,OPERAND1));
-    strcpy(operand2,getData(i,OPERAND2));
-    strcpy(command,getData(i,COMMAND));
-    if(strlen(operand1))
+    int i;
+    for(i=0; i<sTableLen; i++)
     {
-        counter++;
-        if(strlen(operand2)&& !(isRegister(operand1)&& isRegister(operand2)))
-        {
-            counter++;
-        }
-
+        if(!strcmp(symbol,sTable[i].symbol))
+            return sTable[i].address;
     }
-
-    strcpy(command,getData(i,COMMAND));
-    if(!strcmp(command,".data") || !strcmp(command,".string"))
-        return 0;
-
-    while(!isdigit(command[j]))
-        j++;
-
-    if(command[j]=='2')
-        counter = counter*2;
-
-    return counter;
-}*/
-
-
+    return 0;
+}
 
 /*The method get line on input DB and return how many code lines have on the line*/
 int codeLines(int i)

@@ -154,3 +154,37 @@ int checkOperand2 (char oper[], int i)
 
     return flag;
 }
+
+/*The method get line on input DB and return the "L" for IC*/
+/*int lineIC(int i)
+{
+    int counter=1;
+    int j=0;
+    char operand1[MAX_INPUT];
+    char operand2[MAX_INPUT];
+    char command[MAX_INPUT];
+    strcpy(operand1,getData(i,OPERAND1));
+    strcpy(operand2,getData(i,OPERAND2));
+    strcpy(command,getData(i,COMMAND));
+    if(strlen(operand1))
+    {
+        counter++;
+        if(strlen(operand2)&& !(isRegister(operand1)&& isRegister(operand2)))
+        {
+            counter++;
+        }
+
+    }
+
+    strcpy(command,getData(i,COMMAND));
+    if(!strcmp(command,".data") || !strcmp(command,".string"))
+        return 0;
+
+    while(!isdigit(command[j]))
+        j++;
+
+    if(command[j]=='2')
+        counter = counter*2;
+
+    return counter;
+}*/

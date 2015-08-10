@@ -46,8 +46,8 @@ int buildMatrix (FILE *file)
     FILE *ext;
     strcpy(fileEnt,fileName);
     strcpy(fileExt,fileName);
-    strcat(fileEnt,".ent");
-    strcat(fileExt,".ext");
+    strcat(fileEnt,".en");
+    strcat(fileExt,".ex");
     /*Overwrite old files*/
     ent = fopen(fileEnt,"w");
     ext = fopen(fileExt,"w");

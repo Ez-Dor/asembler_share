@@ -1,4 +1,3 @@
-/*The main use for tests until EOP (like EOF but for our project;)*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,6 +7,7 @@ char* fileName;
 int main(int argc, char* argv[])
 {
     char inputFile[FILENAME_MAX];
+    char temp[FILENAME_MAX];
     int flag = TRUE;
     int i;
     FILE *file;
@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
         strcpy(inputFile,argv[i]);
         strcat(inputFile,".as");
         file = fopen (inputFile, "r");
-        if (file == NULL)
+        if (!file)
         {
             printf("File %s does not exist",fileName);
             return 0;
@@ -30,13 +30,32 @@ int main(int argc, char* argv[])
 
         if(!buildMatrix(file)||!changeDollars()||!checkLabels()||!checkAllCommands())
             flag = FALSE;
-        printMatrix();
-        buildSymbolTable();
-        buildOutputTable();
-        freeTables();
+        if(flag)
+        {
+
+            buildSymbolTable();
+            buildOutputTable();
+            freeTables();
+            strcpy(temp,fileName);
+            strcat(temp,".ex");
+            remove(temp);
+            strcpy(temp,fileName);
+            strcat(temp,".en");
+            remove(temp);
+        }
+        else
+        {
+            printf("Cannot compile %s.",fileName);
+            strcpy(temp,fileName);
+            strcat(temp,".ex");
+            remove(temp);
+            strcpy(temp,fileName);
+            strcat(temp,".en");
+            remove(temp);
+        }
+
         freeMatrixMem();
         fclose(file);
-
     }
     return 0;
 }

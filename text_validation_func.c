@@ -369,10 +369,11 @@ int isExtern(char param[])
     char fileExt[FILENAME_MAX];
     extern char* fileName;
     strcpy(fileExt,fileName);
-    strcat(fileExt,".ext");
+    strcat(fileExt,".ex");
     fp = fopen(fileExt,"r");
     if(!fp)
         return FALSE;
+    fseek(fp,SEEK_SET,0);
     while((fscanf(fp,"%s",c))==1)
     {
         if(!strcmp(param,c))
@@ -392,10 +393,11 @@ int isEntry(char param[])
     char fileEnt[FILENAME_MAX];
     extern char* fileName;
     strcpy(fileEnt,fileName);
-    strcat(fileEnt,".ent");
+    strcat(fileEnt,".en");
     fp = fopen(fileEnt,"r");
     if(!fp)
         return FALSE;
+    fseek(fp,SEEK_SET,0);
     while((fscanf(fp,"%s",c))==1)
     {
         if(!strcmp(param,c))
@@ -665,7 +667,7 @@ int changeDollars()
 void moveCulForOneOper()
 {
     extern int line;
-    int i,j,count;
+    int i;
     char temp1[MAX_INPUT];
     int len;
     for (i=1; i<=line; i++)
