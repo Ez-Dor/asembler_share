@@ -1,11 +1,10 @@
-/*Constants for database struct*/
+/*Include guard*/
 #ifndef ASEMBLER_H_
 #define ASEMBLER_H_
 #endif
 
-#define INPUTLINE 0
-
 /*should present status*/
+#define INPUTLINE 0
 #define LABEL 1
 #define COMMAND 2
 #define OPERAND1 3
@@ -83,7 +82,7 @@ int isEntry(char param[]);
 void buildSymbolTable();
 void freeTables();
 void buildOutputTable();
-void moveCulForOneOper();
+void moveColForOneOper();
 void isNegativeOn12Bits (unsigned int *num);
 void isNegative (unsigned int *num);
 void intToBase4 (unsigned int *num);

@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
         printf("No files to compile\n");
         return 0;
     }
-/*Run whole over the arguments*/
+/*Loop through file names.*/
     for(i=1; i<argc; i++)
     {
         fileName = argv[i];
@@ -30,19 +30,19 @@ int main(int argc, char* argv[])
         }
 /*Collect the input from the file and make first validation*/
         flag = buildMatrix(file);
-/*Swap all the Dollars operand and check for validation*/
+/*Swap all the Dollars operand and check that the swaps are legal*/
         if(flag)
             flag = changeDollars();
-/*Check labels, commands and operand validations*/
+/*Check that all labels, commands and operands are valid*/
         if(!checkLabels()||!checkAllCommands())
             flag = FALSE;
-/*Validation ok can go on and parser the input*/
+/*If flag is TRUE, can go on and parser the input*/
         if(flag)
         {
             buildSymbolTable();
             buildOutputTable();
             freeTables();
-        /*Delete temps file*/
+        /*Delete temp files*/
             strcpy(temp,fileName);
             strcat(temp,".ex");
             remove(temp);
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
             remove(temp);
             printf("compiled %s.\n",fileName);
         }
-/*Validation isn't successful*/
+/*if Flag is false, print error*/
         else
         {
         /*Print error*/
@@ -67,6 +67,6 @@ int main(int argc, char* argv[])
 /*Free input table*/
         freeMatrixMem();
         fclose(file);
-    }
+    } /*end for*/
     return 0;
 }

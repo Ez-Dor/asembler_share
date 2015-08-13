@@ -54,8 +54,8 @@ void buildSymbolTable()
             fent = fopen(entFile,"w+");
         }
 /*For the parser the operand should be sort by source on op1 and destination on op2*/
-    moveCulForOneOper();
-/*We will run whole over the input table and take the labels with the correct values*/
+    moveColForOneOper();
+/*We will run all over the input table and take the labels with the correct values*/
     for(i=1,sTableLen=1; i<=line; i++)
     {
         strcpy(temp,getData(i,LABEL));
@@ -595,7 +595,7 @@ void isNegativeOn12Bits (unsigned int *num)
 }
 
 /*All the commend in group 2 should be just with operand destination */
-void moveCulForOneOper()
+void moveColForOneOper()
 {
     extern int line;
     int i;

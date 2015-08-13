@@ -138,3 +138,25 @@
 	<ctype.h>
 	"asembler.h"
 
+1439485166 source:c:\users\lior-f\documents\github\asembler_share\input_collector.c
+	<stdlib.h>
+	<ctype.h>
+	<stdio.h>
+	<string.h>
+	"asembler.h"
+
+1439485166 c:\users\lior-f\documents\github\asembler_share\asembler.h
+
+1439485166 source:c:\users\lior-f\documents\github\asembler_share\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"asembler.h"
+
+1439485166 source:c:\users\lior-f\documents\github\asembler_share\text_validation_func.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"asembler.h"
+

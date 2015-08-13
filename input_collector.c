@@ -66,7 +66,7 @@ int buildMatrix (FILE *file)
         mat[i].inputLine = counter;
         counter++;
         state = LABEL;
-        /*If have a comment skip line*/
+        /*If  comment skip line*/
         if (s==';')
         {
             while (s!='\n')

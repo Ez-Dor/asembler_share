@@ -571,12 +571,11 @@ int isData(int i)
 /*Check if .String has legal values*/
 int isString(int i)
 {
-    char str [64];
+    char str [31];
     int flag=FALSE;
     int len;
 
     strcpy(str, getData(i, OPERAND1));
-    strcat(str, getData(i, OPERAND2));
     len = strlen(str);
 
     if(str[0]=='"' && str[len-1]=='"')
