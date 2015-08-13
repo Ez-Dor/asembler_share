@@ -94,11 +94,12 @@
 	<string.h>
 	"asembler.h"
 
-1438385837 c:\users\liorf\desktop\asembler_share\asembler.h
+1439508389 c:\users\liorf\desktop\asembler_share\asembler.h
 
-1438352159 source:c:\users\liorf\desktop\asembler_share\main.c
+1439506646 source:c:\users\liorf\desktop\asembler_share\main.c
 	<stdio.h>
 	<stdlib.h>
+	<string.h>
 	"asembler.h"
 
 1438385675 source:c:\users\liorf\desktop\asembler_share\firslavelcheckmethod.c
@@ -154,6 +155,28 @@
 	"asembler.h"
 
 1439485166 source:c:\users\lior-f\documents\github\asembler_share\text_validation_func.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"asembler.h"
+
+1439507652 source:c:\users\liorf\desktop\asembler_share\input_collector.c
+	<stdlib.h>
+	<ctype.h>
+	<stdio.h>
+	<string.h>
+	"asembler.h"
+
+1439507652 source:c:\users\liorf\desktop\asembler_share\parser.c
+	<stdlib.h>
+	<ctype.h>
+	<stdio.h>
+	<string.h>
+	<math.h>
+	"asembler.h"
+
+1439507896 source:c:\users\liorf\desktop\asembler_share\text_validation_func.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>

@@ -31,21 +31,18 @@ int checkCommand (char com[], int i)
                 }
                 else
                 {
-                    printf("Ilegal operand %s in line %i\n", getData(i, OPERAND2), getInputLine(i));
                     flag = FALSE;
                 }
 
             }
             else
             {
-                printf("Ilegal operand %s in line %i\n", getData(i, OPERAND1), getInputLine(i));
                 flag = FALSE;
             }
         }
 
         else
         {
-            printf("Did not find two operands for command %s in line %i\n", com, getInputLine(i));
             flag = FALSE;
         }
     }
@@ -70,21 +67,18 @@ int checkCommand (char com[], int i)
                 }
                 else
                 {
-                    printf("Ilegal operand %s in line %i\n", getData(i, OPERAND2), getInputLine(i));
                     flag = FALSE;
                 }
 
             }
             else
             {
-                printf("Ilegal operand %s in line %i\n", getData(i, OPERAND1), getInputLine(i));
                 flag = FALSE;
             }
         }
 
         else
         {
-            printf("Did not find two operands for command %s in line %i\n", com, getInputLine(i));
             flag = FALSE;
         }
     }
@@ -109,21 +103,18 @@ int checkCommand (char com[], int i)
                 }
                 else
                 {
-                    printf("Ilegal operand %s in line %i\n", getData(i, OPERAND2), getInputLine(i));
                     flag = FALSE;
                 }
 
             }
             else
             {
-                printf("Ilegal operand %s in line %i\n", getData(i, OPERAND1), getInputLine(i));
                 flag = FALSE;
             }
         }
 
         else
         {
-            printf("Did not find two operands for command %s in line %i\n", com, getInputLine(i));
             flag = FALSE;
         }
     }
@@ -143,14 +134,12 @@ int checkCommand (char com[], int i)
             }
             else
             {
-                printf("Ilegal operand %s in line %i\n", getData(i, OPERAND1), getInputLine(i));
                 flag = FALSE;
             }
         }
 
         else
         {
-            printf("More than one or no operands for command %s in line %i\n", com, getInputLine(i));
             flag = FALSE;
         }
     }
@@ -175,14 +164,12 @@ int checkCommand (char com[], int i)
             }
             else
             {
-                printf("Ilegal operand %s in line %i\n", getData(i, OPERAND1), getInputLine(i));
                 flag = FALSE;
             }
         }
 
         else
         {
-            printf("More than one or no operands for command %s in line %i\n", com, getInputLine(i));
             flag = FALSE;
         }
     }
@@ -203,14 +190,12 @@ int checkCommand (char com[], int i)
             }
             else
             {
-                printf("Ilegal operand %s in line %i\n", getData(i, OPERAND1), getInputLine(i));
                 flag = FALSE;
             }
         }
 
         else
         {
-            printf("More than one or no operands for command %s in line %i\n", com, getInputLine(i));
             flag = FALSE;
         }
     }
@@ -231,14 +216,12 @@ int checkCommand (char com[], int i)
             }
             else
             {
-                printf("Ilegal operand %s in line %i\n", getData(i, OPERAND1), getInputLine(i));
                 flag = FALSE;
             }
         }
 
         else
         {
-            printf("More than one or no operands for command %s in line %i\n", com, getInputLine(i));
             flag = FALSE;
         }
     }
@@ -253,7 +236,6 @@ int checkCommand (char com[], int i)
             flag = TRUE;
         else
         {
-            printf("Found an operand for command %s in line %i\n", com, getInputLine(i));
             flag = FALSE;
         }
     }
@@ -265,7 +247,6 @@ int checkCommand (char com[], int i)
             flag = TRUE;
         else
         {
-            printf("Ilegal values for .data command in line %i\n", getInputLine(i));
             flag = FALSE;
         }
     }
@@ -277,13 +258,12 @@ int checkCommand (char com[], int i)
             flag = TRUE;
         else
         {
-            printf("Ilegal values for .string command in line %i\n", getInputLine(i));
             flag = FALSE;
         }
     }
 
     if (flag==FALSE)
-        printf("Found wrong command or ilegal operands in line %i\n", getInputLine(i));
+        printf("Found wrong command or illegal operands in line %i\n", getInputLine(i));
 
     return flag;
 }
@@ -454,7 +434,7 @@ int isNumeric(char oper[], int i)
                     if (!(isdigit(oper[j])))
                     {
                         flag = FALSE;
-                        printf("Wrong value \"%c\" in line %i", oper[j], getInputLine(i));
+                        printf("Wrong value \"%c\" in line %i \n", oper[j], getInputLine(i));
                     }
 
                 }
@@ -469,7 +449,7 @@ int isNumeric(char oper[], int i)
 
             if (value > DIRECTMAX || value < DIRECTMIN)
             {
-                printf("Numeric value of operand %s in line %i is out of bounds", oper, getInputLine(i));
+                printf("Numeric value of operand %s in line %i is out of bounds \n", oper, getInputLine(i));
                 flag = FALSE;
             }
         }
@@ -489,6 +469,7 @@ int isData(int i)
     int num;
 
     strcpy(str, getData(i, OPERAND1));
+
     len = strlen(str);
     if(len>0)
     {

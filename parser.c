@@ -37,13 +37,14 @@ void buildSymbolTable()
     unsigned int x;
     int addressCounter = FIRST_ADDRESS;
     FILE *fent;
-/*Allocate memory*/
+    /*Allocate memory*/
     sTable= calloc(line, sizeof(symbolLine));
     if (!sTable)
     {
         printf("Memory allocation failed");
         exit(0);
     }
+/*Handle entry files*/
     strcpy(entFile,fileName);
     strcat(entFile,".en");
     fent = fopen(entFile,"r");
@@ -53,7 +54,7 @@ void buildSymbolTable()
             strcat(entFile,"t");
             fent = fopen(entFile,"w+");
         }
-/*For the parser the operand should be sort by source on op1 and destination on op2*/
+/*For the parser the operand should be sorted by source on op1 and destination on op2, so we move all single operand commands to operand 2 on the table*/
     moveColForOneOper();
 /*We will run all over the input table and take the labels with the correct values*/
     for(i=1,sTableLen=1; i<=line; i++)
@@ -81,9 +82,10 @@ void buildSymbolTable()
     fclose(fent);
 }
 
-/*Create table to the output*/
+/*Create table with the output data*/
 void buildOutputTable()
 {
+/*variables*/
     extern int line;
     extern char* fileName;
     int i=0,j=0,x=0,y=0,len=0,op1=0,op2=0,group=0, opcode=0,IC,DC,temp=0;
@@ -94,10 +96,14 @@ void buildOutputTable()
     char extFile[FILENAME_MAX];
     FILE *fp;
     FILE *fext;
+
+/*copy the file names and add the correct extensions*/
     strcpy(oFile,fileName);
     strcpy(extFile,fileName);
     strcat(oFile,".ob");
     strcat(extFile,".ex");
+
+/*Open the external file*/
     fext = fopen(extFile,"r");
         if(fext)
         {
@@ -129,7 +135,7 @@ void buildOutputTable()
         strcpy(command,getData(i,COMMAND));
         if(command[0]!='.')
         {
-            /*Check the group*/
+            /*Check the command and use the right code for it*/
             if(strlen(getData(i,OPERAND2)))
             {
                 if(strlen(getData(i,OPERAND1)))
@@ -449,7 +455,7 @@ void buildOutputTable()
 
 }
 
-/*Give us the symbol address*/
+/*Returns the symbol address*/
 int getSymbolAddress(char symbol[])
 {
     int i;
@@ -461,7 +467,7 @@ int getSymbolAddress(char symbol[])
     return 0;
 }
 
-/*The method get line on input DB and return how many code lines have on the line*/
+/*Checks the line on the input and return how many code lines we need to have for output*/
 int codeLines(int i)
 {
     extern int line;

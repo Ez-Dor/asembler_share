@@ -17,9 +17,10 @@ typedef struct
 } matrixLine;
 
 
-/*Global variable*/
+/*Global variable for the line number and database table*/
 matrixLine *mat;
 int line;
+
 /*
 Gets input from file, allocates memory and sorts them in a structure.
 Include methods to get set and print the data on the memory
@@ -46,7 +47,7 @@ int buildMatrix (FILE *file)
     strcpy(fileExt,fileName);
     strcat(fileEnt,".en");
     strcat(fileExt,".ex");
-       /*Overwrite old files*/
+    /*Overwrite old files*/
     ent = fopen(fileEnt,"w");
     ext = fopen(fileExt,"w");
     fclose(ent);
@@ -64,7 +65,7 @@ int buildMatrix (FILE *file)
         printf("Memory allocation failed");
         exit(0);
     }
-
+    /*Loop through the lines and sort the data into the struct*/
     while (i<=line)
     {
         mat[i].inputLine = counter;
@@ -267,7 +268,7 @@ int buildMatrix (FILE *file)
         j=0;
         s = fgetc(file);
     }
-    /*Now check if have ant ext or ent that insert to command cuz the line doesn't start wit dot - and fix it*/
+    /*Now check if we have any ext or ent that insert to command cause the line doesn't start with a dot - and fix it*/
     i=0;
     while (i<=line)
     {
@@ -329,6 +330,8 @@ void printMatrix()
     }
 }
 
+
+/*Gety data for a single parameter and index line*/
 char* getData(int index, int param)
 {
     if(index>line || index<1)
@@ -349,6 +352,7 @@ char* getData(int index, int param)
         return "Error parameter was not found\n";
 }
 
+/*Get the line number in the input file*/
 int getInputLine (int i)
 {
     if(i>line || i<0)
@@ -358,7 +362,7 @@ int getInputLine (int i)
 }
 
 
-/*Set a parameter on our matrix */
+/*Set data parameter on our matrix */
 void setData (int index, int param,char data [])
 {
     if(index<=line || index>=1)
@@ -380,6 +384,7 @@ void setData (int index, int param,char data [])
         printf ("Error, parameter or index out of bound\n");
 }
 
+/*Count lines of data for the memory allocation*/
 int lineCounter (FILE *file)
 {
     int counter = 0;
@@ -400,7 +405,7 @@ int lineCounter (FILE *file)
 }
 
 
-/*Free memory of mat*/
+/*Free memory of the global mat*/
 void freeMatrixMem ()
 {
     free(mat);
