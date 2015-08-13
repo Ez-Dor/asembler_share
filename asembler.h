@@ -5,6 +5,7 @@
 
 #define INPUTLINE 0
 
+/*should present status*/
 #define LABEL 1
 #define COMMAND 2
 #define OPERAND1 3
@@ -18,6 +19,7 @@
 #define GROUP2 1
 #define GROUP3 0
 
+/*For every code line have between 1-3 different code lines */
 #define FIRST_LINE 0
 #define SECOND_LINE 1
 #define THIRD_LINE 2

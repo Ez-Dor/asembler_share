@@ -592,7 +592,6 @@ int changeDollars()
     char temp [MAX_INPUT];
     int i=1;
     int flag = TRUE;
-    /*Operand one checks*/
     strcpy(temp,getData(i,OPERAND1));
     if (!strcmp(temp,"$$"))
     {
@@ -604,6 +603,7 @@ int changeDollars()
         strcpy(temp,getData(i,OPERAND1));
         if (!strcmp(temp,"$$"))
         {
+            /*check for $$ in destination operand*/
             if(!strlen(getData(i,OPERAND2)))
             {
                 if( !strcmp(getData(i,COMMAND),"jmp1")||!strcmp(getData(i,COMMAND),"jmp2")||
@@ -611,14 +611,14 @@ int changeDollars()
                         !strcmp(getData(i,COMMAND),"red1")||!strcmp(getData(i,COMMAND),"red2")||
                         !strcmp(getData(i,COMMAND),"prn1")||!strcmp(getData(i,COMMAND),"prn2"))
                 {
-                    if(strlen(getData(i-1,OPERAND2))<=1)
+                    if(!strlen(getData(i-1,OPERAND1)))
                     {
                         printf("Illegal operand %s in line %i, previous operand missing\n", temp, getInputLine(i));
                         flag = FALSE;
                     }
                     else
                     {
-                        strcpy(temp,getData(i-1,OPERAND2));
+                        strcpy(temp,getData(i-1,OPERAND1));
                         setData(i,OPERAND2,temp);
                     }
 
@@ -629,6 +629,7 @@ int changeDollars()
                     flag = FALSE;
                 }
             }
+        /*check for $$ in source operand*/
             else
             {
 
@@ -636,12 +637,12 @@ int changeDollars()
                 {
                     if(!strcmp(getData(i,OPERAND2),"$$"))
                     {
-                        if(strlen(getData(i-1,OPERAND2))<=1)
+                        if(!strlen(getData(i-1,OPERAND1)))
                         {
                             printf("Illegal operand %s in line %i, previous operand missing\n", temp, getInputLine(i));
                             flag = FALSE;
                         }
-                        strcpy(temp,getData(i-1,OPERAND2));
+                        strcpy(temp,getData(i-1,OPERAND1));
                         setData(i,OPERAND2,temp);
                     }
                 }
@@ -662,48 +663,4 @@ int changeDollars()
     }
 
     return flag;
-}
-
-void moveCulForOneOper()
-{
-    extern int line;
-    int i;
-    char temp1[MAX_INPUT];
-    int len;
-    for (i=1; i<=line; i++)
-    {
-
-        strcpy(temp1,getData(i,OPERAND2));
-        if(strcmp(getData(i,COMMAND),".data"))
-        {
-            (len=strlen(temp1));
-            if (!len)
-            {
-                setData(i,OPERAND2,getData(i,OPERAND1));
-                setData(i,OPERAND1,temp1);
-            }
-            else
-            {
-                if(!strlen(temp1))
-                {
-                    setData(i,OPERAND2,getData(i,OPERAND1));
-                    setData(i,OPERAND1,temp1);
-                }
-            }
-        }
-    }
-}
-
-
-
-
-int strlenWithoutSpace(char c[])
-{
-    int i,count;
-    int len=strlen(c);
-    for (count=0,i=0; i<len; i++)
-        if(!isspace(c[i]))
-            count++;
-    return count;
-
 }

@@ -1,8 +1,3 @@
-/*
-Build Matrix by Dor A & Lior F
-Gets input from file, allocates memory and sorts them in a structure.
-Include methods to get set and print the data on the memory
-*/
 
 /*Include standard libraries and custom header*/
 #include <stdlib.h>
@@ -25,6 +20,10 @@ typedef struct
 /*Global variable*/
 matrixLine *mat;
 int line;
+/*
+Gets input from file, allocates memory and sorts them in a structure.
+Include methods to get set and print the data on the memory
+*/
 int buildMatrix (FILE *file)
 {
 
@@ -35,7 +34,6 @@ int buildMatrix (FILE *file)
     char s;
     int counter=1;
     int state = LABEL;
-    int allLines=0;
     int i=1;
     int j=0;
     int x=0;
@@ -48,11 +46,7 @@ int buildMatrix (FILE *file)
     strcpy(fileExt,fileName);
     strcat(fileEnt,".en");
     strcat(fileExt,".ex");
-    /*Overwrite old files*/
-    ent = fopen(fileEnt,"w");
-    ext = fopen(fileExt,"w");
-    fclose(ent);
-    fclose(ext);
+
     /*Use Line Counter to know how many lines are in the input file*/
     line = lineCounter(file);
     /*Set file pointer to start of file*/
@@ -306,18 +300,6 @@ int buildMatrix (FILE *file)
         }
         i++;
     }
-    /*Free all the empty lines on our matrix*/
-    allLines = line+y;
-    while (line<allLines)
-    {
-        free(mat[allLines].label);
-        free(mat[allLines].command);
-        free(mat[allLines].operand1);
-        free(mat[allLines].operand2);
-        free(&mat[allLines].inputLine);
-        allLines--;
-    }
-
     return flag;
 }
 

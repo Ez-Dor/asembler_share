@@ -19,10 +19,14 @@ typedef struct
     unsigned int code;
 } outputLine;
 
+/*Global variables for the tables*/
 symbolLine *sTable;
 outputLine *oTable;
+
+/*Global variables for the length*/
 int sTableLen,oTabelLen;
 
+/*Build the symbol table with the correct address*/
 void buildSymbolTable()
 {
     extern int line;
@@ -31,8 +35,9 @@ void buildSymbolTable()
     char temp[MAX_INPUT];
     int i;
     unsigned int x;
-    int addressCounter = 100;
+    int addressCounter = FIRST_ADDRESS;
     FILE *fent;
+/*Allocate memory*/
     sTable= calloc(line, sizeof(symbolLine));
     if (!sTable)
     {
@@ -48,7 +53,9 @@ void buildSymbolTable()
             strcat(entFile,"t");
             fent = fopen(entFile,"w+");
         }
+/*For the parser the operand should be sort by source on op1 and destination on op2*/
     moveCulForOneOper();
+/*We will run whole over the input table and take the labels with the correct values*/
     for(i=1,sTableLen=1; i<=line; i++)
     {
         strcpy(temp,getData(i,LABEL));
@@ -69,16 +76,12 @@ void buildSymbolTable()
         addressCounter += codeLines(i);
     }
 
-    for(i--; i>=sTableLen; i--)
-    {
-        free(sTable+i);
-    }
-
     /*address counter should be the length of the output*/
     oTabelLen = addressCounter-FIRST_ADDRESS;
     fclose(fent);
 }
 
+/*Create table to the output*/
 void buildOutputTable()
 {
     extern int line;
@@ -117,12 +120,10 @@ void buildOutputTable()
         oTable[i].address = i+FIRST_ADDRESS;
     }
 
-
-
     /*insert the code*/
     for(i=1; i<=line; i++)
     {
-
+/*Copy the input in the correct line*/
         strcpy(operand1,getData(i,OPERAND1));
         strcpy(operand2,getData(i,OPERAND2));
         strcpy(command,getData(i,COMMAND));
@@ -177,7 +178,8 @@ void buildOutputTable()
                     opcode=15;
 
             }
-            /*present status for operands*/
+            /*Check status for operands*/
+
             /*operand1*/
             op1=IS_EMPTY;
             if(group==GROUP1 && isNumeric(operand1,i) )
@@ -195,18 +197,18 @@ void buildOutputTable()
                 op2=IS_LABEL;
             else if(group!=GROUP3 && isRegister(operand2))
                 op2=IS_REGISTER;
-
+/*Get how many code line to the correct line input*/
             len=codeLines(i);
-
+/*Check if its a command with 1 or 2*/
             if(isDoubleCommend(command))
             {
                 len = len/2;
             }
 
-
+/*Run inside the output table and insert correct code for every line in the input (for every input line have 1-3 different code line) */
             for(j=0; j<len; x++,j++)
             {
-
+/*For the first code line to the input make the correct code by the project rules*/
                 if(j==FIRST_LINE)
                 {
                     temp=group;
@@ -220,8 +222,11 @@ void buildOutputTable()
                     oTable[x].code = temp;
                 }
 
+/*Code according to command groups*/
+
                 else if(group == GROUP1 && j>FIRST_LINE)
                 {
+/*Two registers get one code line together*/
                     if(op1==IS_REGISTER && op2==IS_REGISTER)
                     {
                         temp=atoi(&operand1[1]);
@@ -231,14 +236,17 @@ void buildOutputTable()
                         oTable[x].code = temp;
 
                     }
+
                     else if(j==SECOND_LINE)
                     {
+            /*Register get the code with is number and 2 A,R,E bits*/
                         if(op1==IS_REGISTER)
                         {
                             temp = atoi(&operand1[1]);
                             temp <<=(FIVE_BITS+TWO_BITS);
                             oTable[x].code =temp;
                         }
+                        /*Get the number and 2 A,R,E bits*/
                         else if(op1==IS_NUMERIC)
                         {
                             temp = atoi(&operand1[1]);
@@ -250,6 +258,7 @@ void buildOutputTable()
 
 
                         }
+            /*Get the label address from the symbol table*/
                         else if(op1==IS_LABEL)
                         {
                             oTable[x].code = getSymbolAddress(operand1);
@@ -268,12 +277,14 @@ void buildOutputTable()
                     }
                     else if(j==THIRD_LINE)
                     {
+                        /*Register get the code with is number and 2 A,R,E bits*/
                         if(op2==IS_REGISTER)
                         {
 
                             oTable[x].code = atoi(&operand2[1]);
                             oTable[x].code <<=TWO_BITS;
                         }
+                         /*Get the number and 2 A,R,E bits*/
                         else if(op2==IS_NUMERIC)
                         {
 
@@ -284,6 +295,7 @@ void buildOutputTable()
                             oTable[x].code =(unsigned int)temp;
                             oTable[x].code <<=TWO_BITS;
                         }
+                            /*Get the label address from the symbol table*/
                         else if(op2==IS_LABEL)
                         {
                             oTable[x].code = getSymbolAddress(operand2);
@@ -304,12 +316,14 @@ void buildOutputTable()
 
                 else if(group == GROUP2 && j>FIRST_LINE)
                 {
+                    /*Register get the code with is number and 2 A,R,E bits*/
                     if(op2==IS_REGISTER)
                     {
 
                         oTable[x].code = atoi(&operand2[1]);
                         oTable[x].code <<=TWO_BITS;
                     }
+                     /*Get the number and 2 A,R,E bits*/
                     if(op2==IS_NUMERIC)
                     {
                         temp = atoi(&operand2[1]);
@@ -319,7 +333,7 @@ void buildOutputTable()
                         oTable[x].code =(unsigned int)temp;
                         oTable[x].code <<=TWO_BITS;
                     }
-
+                            /*Get the label address from the symbol table*/
                     if(op2==IS_LABEL)
                     {
 
@@ -338,12 +352,14 @@ void buildOutputTable()
 
                 }
             }
+/*If is a commend with 2 on the end copy the last code line that you created*/
             if(isDoubleCommend(command))
             {
                 for(j=0; j<len; x++,j++)
                 {
                     oTable[x].code=oTable[x-len].code;
                 }
+            /*copy to the extern file too*/
                 if(op1==IS_LABEL && isExtern(operand1))
                     {
                         temp = oTable[x-2].address;
@@ -373,9 +389,11 @@ void buildOutputTable()
         {
             strcpy(operand1,getData(i,OPERAND1));
             strcpy(operand2,getData(i,OPERAND2));
+            /*For every data or string get how many code line they required, and insert it*/
             len = codeLines(i);
             for(y=0,j=0; j<len; j++,x++)
             {
+        /*String should get the asci value for the letter*/
                 if(!strcmp(command,".string"))
                 {
                     if(j<len-1)
@@ -383,6 +401,7 @@ void buildOutputTable()
                     else
                         oTable[x].code = 0;
                 }
+        /*Data should get the number*/
                 else if(!strcmp(command,".data"))
                 {
                     if(j==0)
@@ -430,7 +449,7 @@ void buildOutputTable()
 
 }
 
-
+/*Give us the symbol address*/
 int getSymbolAddress(char symbol[])
 {
     int i;
@@ -509,7 +528,7 @@ int isDoubleCommend (char command[])
     return FALSE;
 }
 
-/*The function change the value of the intiger to base 4*/
+/*The function change the value of the integer to base 4*/
 void intToBase4 (unsigned int *num)
 {
     int d[7];
@@ -528,30 +547,30 @@ void intToBase4 (unsigned int *num)
     (*num)=(unsigned int)x;
 
 }
-
+/*The func give us the binary value in integer from 10 bits negative number*/
 void isNegative (unsigned int *num)
 {
     unsigned int temp;
     int i,j;
-    int bits[10];
+    int bits[TEN_BITS];
     double x;
     temp = *num;
     *num=0;
     j=1;
-    for(i=0; i<10; i++)
+    for(i=0; i<TEN_BITS; i++)
     {
         bits[i] = (temp&j);
-        temp>>=1;
+        temp>>=ONE_BIT;
     }
 
-    for(x=0,i=0; i<10; i++)
+    for(x=0,i=0; i<TEN_BITS; i++)
     {
         x+= bits[i]*(pow(2,i));
     }
 
     *num=(unsigned int)x;
 }
-
+/*The func give us the binary value in integer from 12 bits negative number*/
 void isNegativeOn12Bits (unsigned int *num)
 {
     unsigned int temp;
@@ -575,7 +594,39 @@ void isNegativeOn12Bits (unsigned int *num)
     *num=(unsigned int)x;
 }
 
+/*All the commend in group 2 should be just with operand destination */
+void moveCulForOneOper()
+{
+    extern int line;
+    int i;
+    char temp1[MAX_INPUT];
+    int len;
+    for (i=1; i<=line; i++)
+    {
 
+        strcpy(temp1,getData(i,OPERAND2));
+        if(strcmp(getData(i,COMMAND),".data"))
+        {
+            (len=strlen(temp1));
+            if (!len)
+            {
+                setData(i,OPERAND2,getData(i,OPERAND1));
+                setData(i,OPERAND1,temp1);
+            }
+            else
+            {
+                if(!strlen(temp1))
+                {
+                    setData(i,OPERAND2,getData(i,OPERAND1));
+                    setData(i,OPERAND1,temp1);
+                }
+            }
+        }
+    }
+}
+
+
+/*Free the memory tables*/
 void freeTables()
 {
     free(sTable);
