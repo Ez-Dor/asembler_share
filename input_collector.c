@@ -46,7 +46,11 @@ int buildMatrix (FILE *file)
     strcpy(fileExt,fileName);
     strcat(fileEnt,".en");
     strcat(fileExt,".ex");
-
+       /*Overwrite old files*/
+    ent = fopen(fileEnt,"w");
+    ext = fopen(fileExt,"w");
+    fclose(ent);
+    fclose(ext);
     /*Use Line Counter to know how many lines are in the input file*/
     line = lineCounter(file);
     /*Set file pointer to start of file*/
